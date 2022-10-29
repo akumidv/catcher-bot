@@ -1,0 +1,5 @@
+# TODO to args
+exchanges:
+  - binance
+  #- kucoin
+trade_type: "futures" # "futures", "market"
