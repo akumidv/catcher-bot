@@ -11,7 +11,8 @@ DATE_FORMAT_STR = '%Y-%m-%d %H:%M:%S'
 HANDLERS = []
 MIN_LEVEL = logging.INFO
 
-
+def get_def_logger(name):
+    return logging.getLogger(name)
 
 def init(levels: Optional[Dict] = None):
     global HANDLERS
@@ -23,10 +24,9 @@ def init(levels: Optional[Dict] = None):
         MIN_LEVEL = set_level
 
 
-
-def get_logger(module_name: Optional[str] = None):
+def get_logger(module_name: Optional[str] = None, init_levels: Optional[Dict] = None):
     if len(HANDLERS) == 0:
-        init()
+        init(init_levels)
     name = LOG_NAME
     if module_name is not None:
         name = f'{LOG_NAME}:{module_name}'

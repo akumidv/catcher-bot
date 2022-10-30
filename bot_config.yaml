@@ -3,3 +3,8 @@ exchanges:
   - binance
   #- kucoin
 trade_type: "futures" # "futures", "market"
+
+logger:
+  console: debug
+  file: debug
+  # telegram
