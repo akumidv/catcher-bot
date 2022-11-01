@@ -8,3 +8,11 @@ logger:
   console: debug
   file: debug
   # telegram
+
+telegram:
+  chat_id: ''
+  bot_token: ''
+
+binance:
+  api_key: ''
+  secret_key: ''

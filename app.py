@@ -3,7 +3,8 @@ import init
 
 
 def bot_init():
-    config = init.configure_bot()
+    bot_cfg = init.configure_bot()
+    print('[DEV]', bot_cfg)
     log = logger.get_logger(module_name='app')
     log.info('Init completed')
 
