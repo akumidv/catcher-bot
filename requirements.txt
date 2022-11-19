@@ -1,2 +1,10 @@
+# config
 PyYAML
+
+# data
+numpy
+pandas
+
+# plot
+bokeh
 
