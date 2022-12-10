@@ -7,4 +7,5 @@ pandas
 
 # plot
 bokeh
-
+matplotlib
+mplfinance
