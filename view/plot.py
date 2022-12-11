@@ -36,7 +36,8 @@ def plot_png(df_graph: pd.DataFrame, symbol, tf='1s', params=None):
         apds = None
     df = df.fillna(value=np.nan)
     buf = io.BytesIO()
-    mpf.plot(df, addplot=apds, type='candle', volume=False, savefig=buf)
+    mpf.plot(df, addplot=apds, type='candle', title=f'\n{symbol}', volume=False, savefig=buf)
+    del df
     buf.seek(0)
     # IPydisplay.Image(buf.read())
     return buf
