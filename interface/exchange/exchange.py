@@ -1,6 +1,7 @@
 import datetime
 import math
 import asyncio
+import importlib
 
 WEIGHT_PER_REQUEST = 1
 WEIGHT_LIMIT = 2200
@@ -28,3 +29,13 @@ async def _wait_for_next_request(): # TODO add exhcnage type and there are limit
         USED_WEIGHT['request_time'] = cur_minute
         USED_WEIGHT['weight'] = WEIGHT_PER_REQUEST
         USED_WEIGHT['is_showed'] = False
+
+
+
+def init_exchange(exchange_name, credential):
+    exchange_module = importlib.import_module(f'interface.exchange.{exchange_name}_class', exchange_name) #'subscriber')#'interface/exchange', name)
+    class_name = exchange_name[0].upper() + exchange_name[1:].lower()
+    exchange = exchange_module.__getattribute__(class_name)(credential)
+    return exchange
+
+

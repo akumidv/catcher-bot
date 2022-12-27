@@ -1,6 +1,6 @@
 # config
 PyYAML
-
+python-binance
 # data
 numpy
 pandas

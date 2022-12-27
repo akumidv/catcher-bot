@@ -35,8 +35,8 @@ def _get_args() -> argparse.Namespace:
 
     parser.add_argument('--cfg', default='./bot_config.yaml', type=argparse.FileType('r'),
                         help='The bot configuration in YAML format. See default "bot_config.yaml" file')
-    parser.add_argument('--exchanges', default=['binance'], nargs='*', choices=['binance'],
-                        help='List of exchanges')  # , 'kucoin'
+    parser.add_argument('--exchange', default=['binance'], nargs='*', choices=['binance'],
+                        help='List of exchange')  # , 'kucoin'
     parser.add_argument('--trade_type', default='futures', choices=['futures', 'market'],
                         help='Trade type')  # , 'kucoin'
     parser.add_argument('--telegram_chat_id', required=False,

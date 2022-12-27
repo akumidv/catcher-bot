@@ -2,7 +2,7 @@
 exchanges:
   - binance
   #- kucoin
-trade_type: "futures" # "futures", "market"
+trade_type: "futures" # "futures", "stock"
 
 logger:
   console: debug
