@@ -1,8 +1,12 @@
 # TODO to args
+
 exchanges:
   - binance
   #- kucoin
-trade_type: "futures" # "futures", "stock"
+
+market_types:
+#  - stock
+  - futures
 
 logger:
   console: debug
@@ -14,5 +18,9 @@ telegram:
   bot_token: ''
 
 binance:
+  api_key: ''
+  secret_key: ''
+
+binance_futures:
   api_key: ''
   secret_key: ''

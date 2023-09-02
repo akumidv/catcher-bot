@@ -2,9 +2,19 @@
 WARNING. To show log in pycharm set additional arguments to "-s -o log_cli=true  -o log_cli_level=DEBUG"
 """
 import os
-
+import pytest
 import logger
 import logging
+
+
+def test_show_logger_lev():
+    logger.init({'console': 'debug'})
+    log = logger.get_logger(module_name=f'test_log')
+    log.debug('Debug')
+    log.info('Info')
+    log.warning('Warning')
+    log.error('Error')
+    log.critical('Critical')
 
 
 def test_get_logger():
@@ -20,7 +30,7 @@ def test_get_logger():
     log_fn = log_fn[:log_fn.find('.log') + 4]
     with open(log_fn, 'r') as fl:
         file_contents = fl.read()
-    os.remove(log_fn)
+    #os.remove(log_fn)
     print('Log file', log_fn, 'contain:')
     print(file_contents)
     assert '[DEBUG' in file_contents and '[WARNING' in file_contents
@@ -37,8 +47,8 @@ def test_init():
     assert isinstance(logger.HANDLERS[0], logging.StreamHandler)
     assert isinstance(logger.HANDLERS[1], logging.StreamHandler)
     logger.init({'file': 'debug'})
-    assert len(logger.HANDLERS) == 3
-    assert isinstance(logger.HANDLERS[2], logging.FileHandler)
+    assert len(logger.HANDLERS) == 1
+    assert isinstance(logger.HANDLERS[0], logging.FileHandler)
 
 
 def test__get_logger_type():

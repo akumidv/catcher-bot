@@ -19,8 +19,8 @@ def configure_bot() -> Dict:
     args = _get_args()
     bot_cfg = _get_bot_config_from_args(args)
     _log_init(bot_cfg)
-    bot_cfg = _update_config_form_args(bot_cfg, args)
-    bot_cfg = _update_config_from_env(bot_cfg)  # TODO
+    bot_cfg = _update_config_from_args(bot_cfg, args)
+    bot_cfg = _update_config_from_env(bot_cfg)
     return bot_cfg
 
 
@@ -35,14 +35,14 @@ def _get_args() -> argparse.Namespace:
 
     parser.add_argument('--cfg', default='./bot_config.yaml', type=argparse.FileType('r'),
                         help='The bot configuration in YAML format. See default "bot_config.yaml" file')
-    parser.add_argument('--exchange', default=['binance'], nargs='*', choices=['binance'],
+    parser.add_argument('--exchange',nargs='*', choices=['binance'], #  default=['binance'],
                         help='List of exchange')  # , 'kucoin'
-    parser.add_argument('--trade_type', default='futures', choices=['futures', 'market'],
+    parser.add_argument('--trade_type', choices=['futures', 'market'], # default='futures',
                         help='Trade type')  # , 'kucoin'
     parser.add_argument('--telegram_chat_id', required=False,
-                        help='Telegram chat id. You need before send "/start" command to bot from this id')
+                        help='Telegram chat id.')
     parser.add_argument('--telegram_bot_token', required=False,
-                        help='Telegram bot token. You need before send "/start" command to bot with this token')
+                        help='Telegram bot token.')
     args = parser.parse_args()
     return args
 
@@ -53,6 +53,7 @@ def _get_bot_config_from_args(args: argparse.Namespace) -> Dict:
 
 
 def _update_config_from_env(bot_cfg):     # TODO update some config values from environment
+    """update some config values from environment"""
     if 'telegram' not in bot_cfg: bot_cfg['telegram'] = {'chat_id': '', 'bot_token': ''}
     if os.getenv('TG_CHAT_ID'): bot_cfg['telegram']['chat_id'] = os.getenv('TG_CHAT_ID')
     if os.getenv('TG_BOT_TOKEN'): bot_cfg['telegram']['bot_token'] = os.getenv('TG_BOT_TOKEN')
@@ -65,27 +66,26 @@ def _update_config_from_env(bot_cfg):     # TODO update some config values from 
     return bot_cfg
 
 
-def _update_config_form_args(bot_cfg: Dict, args: argparse.Namespace) -> Dict:
+def _update_config_from_args(bot_cfg: Dict, args: argparse.Namespace) -> Dict:
+    changed_params = []
     for name in vars(args):
-        print('[DEV] ARGS name', name)
         if name in ARGS_PARAM_NAMES_FOR_BOT or name not in ARGS_PARAM_NAMES_TO_CHANGE_CFG:
             continue
         arg_value = getattr(args, name)
         if arg_value is None:
             continue
+        changed_params.append(name)
         name_to_split = [split_name for split_name in ARGS_PARAM_NAMES_WITH_LEVEL if f'{name}_'.startswith(split_name)]
-
         if name_to_split:
             group_name = name_to_split[0]
             second_level_name = name[len(f'{group_name}_'):]
-
             if group_name not in bot_cfg:
                 bot_cfg[group_name] = {}
             bot_cfg[group_name][second_level_name] = arg_value
-            print('[DEV] second level', name, group_name, second_level_name, arg_value)
+
         else:
-            print('[DEV]', name, arg_value)
             bot_cfg[name] = arg_value
-    log.debug('Config updated by app arguments')
+    if len(changed_params):
+        log.debug(f'Config updated by app arguments: {",".join(changed_params)}')
     return bot_cfg
 

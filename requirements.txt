@@ -9,3 +9,4 @@ pandas
 bokeh
 matplotlib
 mplfinance
+numba
