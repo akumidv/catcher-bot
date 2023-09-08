@@ -1,4 +1,4 @@
-import logger
+from view import logger
 import init
 
 

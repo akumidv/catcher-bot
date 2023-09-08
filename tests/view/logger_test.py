@@ -3,7 +3,7 @@ WARNING. To show log in pycharm set additional arguments to "-s -o log_cli=true 
 """
 import os
 import pytest
-import logger
+from view import logger
 import logging
 
 
@@ -30,7 +30,7 @@ def test_get_logger():
     log_fn = log_fn[:log_fn.find('.log') + 4]
     with open(log_fn, 'r') as fl:
         file_contents = fl.read()
-    #os.remove(log_fn)
+    os.remove(log_fn)
     print('Log file', log_fn, 'contain:')
     print(file_contents)
     assert '[DEBUG' in file_contents and '[WARNING' in file_contents

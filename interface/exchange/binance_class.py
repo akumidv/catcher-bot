@@ -4,7 +4,7 @@ from binance.client import AsyncClient, BinanceAPIException, Client
 # from binance.client import AsyncClient, BinanceAPIException
 from binance.streams import BinanceSocketManager
 
-from . import exchange_class
+from interface.exchange import exchange_class
 
 
 class Binance(exchange_class.Exchange):

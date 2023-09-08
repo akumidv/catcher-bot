@@ -3,8 +3,7 @@ import os
 import yaml
 import argparse
 from typing import Dict, Tuple
-import logging
-import logger
+from view import logger
 
 ENV_PREFIX = 'BOT'
 LOG_NAME = 'init'

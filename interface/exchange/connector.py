@@ -11,7 +11,7 @@ API_WEIGHT = {
 USED_WEIGHT = {'request_time': datetime.datetime.fromtimestamp(0), 'used_weight': 0, 'is_showed': False}
 
 
-async def _wait_for_next_request(): # TODO add exhcnage type and there are limits and weight (init form exchange module)
+async def _wait_for_next_request():  # TODO add exhcnage type and there are limits and weight (init form exchange module)
     global USED_WEIGHT
     cur_datetime = datetime.datetime.now()
     cur_minute = cur_datetime.replace(second=0, microsecond=0)
