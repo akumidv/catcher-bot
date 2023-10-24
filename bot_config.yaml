@@ -17,10 +17,16 @@ telegram:
   chat_id: ''
   bot_token: ''
 
-binance:
-  api_key: ''
-  secret_key: ''
+credentials:
+  stock:
+    binance:
+      api_key: ''
+      secret_key: ''
 
-binance_futures:
-  api_key: ''
-  secret_key: ''
+  futures:
+    binance:
+      api_key: ''
+      secret_key: ''
+
+strategy:
+  folder: 'strategy'

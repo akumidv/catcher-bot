@@ -3,6 +3,8 @@ from typing import Optional, Union, Dict
 import logging
 import os
 import sys
+from logging.handlers import TimedRotatingFileHandler, RotatingFileHandler
+
 
 LOG_NAME = 'bot'
 FORMAT_STR = '%(asctime)s [%(levelname)-7s] %(name)10s: %(message)s'
@@ -12,6 +14,7 @@ DATE_FORMAT_STR = '%Y-%m-%d %H:%M:%S'
 HANDLERS = []
 MIN_LEVEL = logging.INFO
 
+LOG_FOLDER = os.path.abspath(os.path.join(os.path.curdir, 'log'))
 
 def get_def_logger(name):
     return logging.getLogger(name)
@@ -92,8 +95,11 @@ def _get_handlers_and_min_level(levels: Optional[Dict] = None):
             handlers.append(console_handler)
 
     if 'file' in levels:
-        filename = f'bot_{cur_date.isoformat(timespec="minutes")}.log'
-        file_handler = logging.FileHandler(filename=filename, mode='w', delay=True)  # RotatingFileHandler or TimedRotatingFileHandler may be better?
+        os.makedirs(LOG_FOLDER, exist_ok=True) # TODO name and parameters to config
+        log_fn = f'{LOG_FOLDER}/bot_{cur_date.isoformat(timespec="minutes")}.log'
+        # file_handler = logging.FileHandler(filename=filename, mode='w', delay=True)  # RotatingFileHandler or TimedRotatingFileHandler may be better?
+        # file_handler = RotatingFileHandler(filename=log_fn, maxBytes=100000, backupCount=10, delay=True)
+        file_handler = TimedRotatingFileHandler(filename=log_fn, when='D', interval=1, backupCount=14, delay=True)
         log_level = _get_logger_type(levels['file'])
         if set_level is None or set_level > log_level:
             set_level = log_level

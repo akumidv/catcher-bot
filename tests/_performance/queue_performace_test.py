@@ -3,7 +3,7 @@ import timeit
 
 # https://docs.python.org/3/library/multiprocessing.html
 
-def test_pipe_and_queue():
+def test_pipe_and_queue_performance():
     ticker = {'open': 1234, 'close': 1235}
     ticker_str = "{'open': 1234, 'close': 1235}"
 

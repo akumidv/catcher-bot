@@ -1,14 +1,18 @@
-from view import logger
-import init
+
+from core.bot_context import BotContext
+from controller.strategy_dispatcher import StrategyDispatcher
 
 
-def bot_init():
-    bot_cfg = init.configure_bot()
-    log = logger.get_logger(module_name='app')
-    log.info('Init completed')
+def run():
+    bc = BotContext()
+    sd = StrategyDispatcher(bc)
+
+    sd.run()
+
+
 
 
 if __name__ == '__main__':
-    bot_init()
+    run()
 
 
