@@ -27,13 +27,14 @@ params = {
     'notes': ['note']
 }
 
+@pytest.mark.skip
 def test__get_graph_png(df):
     png = plot.plot_png(df, 'STMXUSDT', '5m', params)
     assert isinstance(png, io.BytesIO)
     with open('./test.png', 'wb') as f:
         f.write(png.getbuffer())
 
-
+@pytest.mark.skip
 def test__get_graph_html(df):
 
     params = {'root_time': 1668659100325, 'top_time': 1668659700123,

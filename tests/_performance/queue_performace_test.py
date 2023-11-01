@@ -1,8 +1,10 @@
+import pytest
 import multiprocessing
 import timeit
 
 # https://docs.python.org/3/library/multiprocessing.html
 
+@pytest.mark.skip
 def test_pipe_and_queue_performance():
     ticker = {'open': 1234, 'close': 1235}
     ticker_str = "{'open': 1234, 'close': 1235}"

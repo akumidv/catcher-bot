@@ -1,10 +1,12 @@
 
+from core.config import configure_bot
 from core.bot_context import BotContext
 from controller.strategy_dispatcher import StrategyDispatcher
 
 
 def run():
-    bc = BotContext()
+    bot_cfg = configure_bot()
+    bc = BotContext(bot_cfg)
     sd = StrategyDispatcher(bc)
 
     sd.run()

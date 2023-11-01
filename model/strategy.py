@@ -6,8 +6,9 @@ class Strategy:
 
     @abstractmethod
     def next(self):
-        """Переместить объект"""
+        """Next tick"""
+
     @property
     @abstractmethod
-    def speed(self):
-        """Скорость объекта"""
+    def init(self):
+        """Init"""

@@ -14,7 +14,8 @@ DATE_FORMAT_STR = '%Y-%m-%d %H:%M:%S'
 HANDLERS = []
 MIN_LEVEL = logging.INFO
 
-LOG_FOLDER = os.path.abspath(os.path.join(os.path.curdir, 'log'))
+LOG_FOLDER = os.path.abspath(os.path.join(os.path.curdir, 'log')) # TODO to config
+
 
 def get_def_logger(name):
     return logging.getLogger(name)
@@ -30,7 +31,7 @@ def init(levels: Optional[Dict] = None):
         MIN_LEVEL = set_level
 
 
-def get_logger(module_name: Optional[str] = None, init_levels: Optional[Dict] = None):
+def get_logger(module_name: Optional[str] = None, init_levels: Optional[Dict] = None) -> logging.Logger:
     if len(HANDLERS) == 0:
         init(init_levels)
     name = LOG_NAME

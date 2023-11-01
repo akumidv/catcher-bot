@@ -8,6 +8,7 @@ market_types:
 #  - stock
   - futures
 
+
 logger:
   console: debug
   file: debug
@@ -28,5 +29,5 @@ credentials:
       api_key: ''
       secret_key: ''
 
-strategy:
-  folder: 'strategy'
+strategies:
+  path: 'strategies'

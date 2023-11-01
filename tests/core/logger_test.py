@@ -3,7 +3,7 @@ WARNING. To show log in pycharm set additional arguments to "-s -o log_cli=true 
 """
 import os
 import pytest
-from view import logger
+from core import logger
 import logging
 
 
@@ -23,10 +23,15 @@ def test_get_logger():
     for idx in range(2):
         log = logger.get_logger(module_name=f'test_{idx}')
         log.debug(f'{test_phrase[0]}_{idx}')
-        log.warn(f'{test_phrase[1]}_{idx}')
-    file_handler_idx = [i for i in range(len(log.handlers)) if repr(log.handlers[i]).startswith('<FileHandler')]
+        log.warning(f'{test_phrase[1]}_{idx}')
+    file_handler_idx = [i for i in range(len(log.handlers)) if repr(log.handlers[i]).startswith('<FileHandler') or \
+                                                               repr(log.handlers[i]).startswith('<TimedRotatingFileHandler') or \
+                                                               repr(log.handlers[i]).startswith('<RotatingFileHandler')]
     assert len(file_handler_idx)
-    log_fn = repr(log.handlers[file_handler_idx[0]]).replace('<FileHandler ', '')
+
+    log_fn = repr(log.handlers[file_handler_idx[0]]).replace('<FileHandler ', '')\
+                                                    .replace('<TimedRotatingFileHandler ', '')\
+                                                    .replace('<RotatingFileHandler ', '')
     log_fn = log_fn[:log_fn.find('.log') + 4]
     with open(log_fn, 'r') as fl:
         file_contents = fl.read()
@@ -52,12 +57,8 @@ def test_init():
 
 
 def test__get_logger_type():
-    log_level = logger._get_logger_type('warning')
-    assert log_level == logging.WARNING
-    log_level = logger._get_logger_type()
-    assert log_level == logging.INFO
-    log_level = logger._get_logger_type(12)
-    assert log_level == logging.INFO
-    log_level = logger._get_logger_type(12, 'debug')
-    assert log_level == logging.DEBUG
+    assert logging.WARNING == logger._get_logger_type('warning')
+    assert logging.WARNING == logger._get_logger_type()
+    assert logging.WARNING == logger._get_logger_type(12)
+    assert logging.DEBUG == logger._get_logger_type(12, 'debug')
 

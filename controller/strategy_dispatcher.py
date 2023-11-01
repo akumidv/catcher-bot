@@ -17,6 +17,7 @@ import os
 from core.bot_context import BotContext
 import multiprocessing
 
+
 class StrategyDispatcher:
 
     def __init__(self, bc: BotContext):
@@ -26,10 +27,11 @@ class StrategyDispatcher:
         # get strategies list that contain exchanges and tickers
 
 
+
     def run(bc: BotContext):
         # or prepare exchanges list and tickers there?
         # init subscriptions there?
-        pass
+
         strategy = lambda x: x # TODO mock
         jobs = []
         for i in range(4):
