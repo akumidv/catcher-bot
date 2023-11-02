@@ -18,7 +18,7 @@ def plot_png(df_graph: pd.DataFrame, symbol, tf='1s', params=None):
     df = df_graph.copy()
     columns_rename = {col: col[0].upper() + col[1:].lower() for col in df.columns if col not in columns_names and col[0].upper() + col[1:].lower() in columns_names}
     df.rename(columns=columns_rename, inplace=True)
-    df.index.name = 'Date'
+    df.index.__name__ = 'Date'
     if isinstance(params, dict):
         apds = []
         if isinstance(params.get('lines'), list):

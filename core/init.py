@@ -3,12 +3,15 @@ import importlib
 import logging
 import os
 import sys
+from typing import List, Type
+
 from core.bot_context import BotContext
 from model.strategy import Strategy
-
+import inspect
 
 BOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
+STRATEGY_NAME_ATTR = 'name'
 
 def init_exchange(exchange_name, credential, is_socket: bool = False, market_type: str = 'stock'):
     exchange_module = importlib.import_module(f'interface.exchange.{exchange_name}_class', exchange_name) #'subscriber')#'interface/exchange', name)
@@ -22,7 +25,7 @@ def init_exchange(exchange_name, credential, is_socket: bool = False, market_typ
     return exchange
 
 
-def init_strategies(bc: BotContext, path: str) -> list[Strategy]:
+def init_strategies(bc: BotContext, path: str) -> list[Type[Strategy]]:
     path = path if path.startswith('/') else os.path.normpath(os.path.join(BOT_DIR, path))
     sys.path.append(path)
     modules_fn = [os.path.normpath(os.path.join(path, fn)) for fn in os.listdir(path) if fn.endswith('.py')]
@@ -33,18 +36,15 @@ def init_strategies(bc: BotContext, path: str) -> list[Strategy]:
         _strategy_module = importlib.util.module_from_spec(spec)
         sys.modules[module_name] = _strategy_module
         spec.loader.exec_module(_strategy_module)
-        try:
-            class_name = _strategy_module.__getattribute__('__strategy_name__')
-            try:
-                _strategy_class = _strategy_module.__getattribute__(class_name)
-                strategies.append(_strategy_class)
-            except AttributeError:
-                bc.log.error(
-                    f'The strategy module {module_name} from file {fn} do not have class name {class_name}" that set '
-                    f'in the module __strategy_name__" parameter '
-                    f'Strategy loading is skipped')
-        except AttributeError:
-            bc.log.error(f'The strategy module {module_name} from file {fn} do not have "__strategy_name__" parameter '
-                         f'that contain strategy class name or the class itself. Strategy loading is skipped')
 
+        module_attributes = dir(_strategy_module)
+        for attr_name in module_attributes:
+            module_attr = _strategy_module.__getattribute__(attr_name)
+            if attr_name != 'Strategy' and inspect.isclass(module_attr) and issubclass(module_attr, Strategy):
+                strategy_name = attr_name
+                if STRATEGY_NAME_ATTR in dir(module_attr):
+                    strategy_name = getattr(module_attr, STRATEGY_NAME_ATTR)
+                bc.log.info(f'Added strategy "{strategy_name}" [class "{attr_name}"] from strategy module {module_name}')
+                strategies.append(module_attr)
     return strategies
+
