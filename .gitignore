@@ -2,7 +2,7 @@
 .idea
 .pytest_cache
 *.log
-
+.run
 # Coverage
 .coverage
 htmlcov

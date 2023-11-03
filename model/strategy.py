@@ -1,10 +1,12 @@
 from abc import ABCMeta, abstractmethod, abstractproperty
+from dataclasses import dataclass
+
 
 
 class Strategy:
     __metaclass__ = ABCMeta
 
-    __name__ = 'strategy'
+    name = 'Strategy interface'
 
     @abstractmethod
     def next(self):
@@ -14,3 +16,4 @@ class Strategy:
     @abstractmethod
     def init(self):
         """Init"""
+
