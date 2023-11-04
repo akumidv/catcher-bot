@@ -5,9 +5,9 @@ from typing import List, Dict
 
 
 @dataclass(frozen=True)
-class StrategyInstance:
-    module: Strategy
+class StrategyInstance: # TODO should be instance or have sence init in child process with data and control pipes?
+    module: type[Strategy]
     filepath: str
     name: str
     code: str
-    configs: List[StrategyConfig]
+    configs: list[StrategyConfig]

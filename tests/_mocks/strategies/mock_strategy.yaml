@@ -1,2 +1,10 @@
-- name: 'CFG'
-  parameters: null
+code: 'MOCK_CFG'
+parameters: null
+exchanges_symbols:
+  - exchange_code: 'binance'
+    type: 'future'
+    symbols: # All?
+      - BTCUSDT
+      - ETHUSDT
+    #black_list_symbols:
+    #white_list_symbols:

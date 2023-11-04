@@ -1,7 +1,7 @@
 import pytest
 from model.strategy_instance import StrategyInstance
 from model.strategy import Strategy
-from tests.model.strategy_config_test import strategy_cfg_mock, strategy_cfg_dict, strategy_cfg_list
+from tests.model.strategy_config_test import strategy_cfg_mock, strategy_cfg_dict
 from tests._mocks.strategies.mock_strategy import MockStrategy
 import yaml
 import logging
