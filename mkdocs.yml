@@ -1,0 +1,76 @@
+# Example https://github.com/readthedocs-examples/example-mkdocs-basic
+
+site_name: Catcher Bot
+site_url: https://github.com/akumidv/catcher-bot
+site_description: Catcher Bot - multi portfolio and strategy algorithmic trading based on python strategies
+site_author: akumidv
+repo_url: https://github.com/akumidv/catcher-bot
+edit_uri: ""
+theme:
+  name: readthedocs
+#    name: material
+    #name: mkdocs
+  locale: en
+#    analytics: {gtag: 'G-274394082'}
+  highlightjs: true
+#    hljs_languages:
+#        - yaml
+#        - django
+
+nav:
+  - Home: index.md
+#    - Getting Started: getting-started.md
+#    - User Guide:
+#        - Overview: user-guide/index.md
+#        - Installation: user-guide/installation.md
+#        - Writing Your Docs: user-guide/writing-your-docs.md
+#        - Choosing Your Theme: user-guide/choosing-your-theme.md
+#        - Customizing Your Theme: user-guide/customizing-your-theme.md
+#        - Localizing Your Theme: user-guide/localizing-your-theme.md
+#        - Configuration: user-guide/configuration.md
+#        - Deploying Your Docs: user-guide/deploying-your-docs.md
+#    - Developer Guide:
+#        - Overview: dev-guide/index.md
+#        - Themes: dev-guide/themes.md
+#        - Translations: dev-guide/translations.md
+#        - Plugins: dev-guide/plugins.md
+#    - About:
+#        - Release Notes: about/release-notes.md
+#        - Contributing: about/contributing.md
+#        - License: about/license.md
+
+#extra_css:
+#    - css/extra.css
+
+markdown_extensions:
+  - markdown_include.include:
+      base_path: .
+  - toc:
+      permalink: 
+  - admonition
+  - attr_list
+  - def_list
+#  - mdx_gh_links:
+#    user: mkdocs
+#    repo: mkdocs
+
+
+copyright: Copyright &copy; 2023 <a href="https://github.com/akumidv">Andrei Kuminov
+
+plugins:
+  - search
+  - mkdocstrings:
+    handlers:
+      # See: https://mkdocstrings.github.io/python/usage/
+      python:
+        options:
+          docstring_style: sphinx
+
+#    - with-pdf:
+#        cover: true
+#        cover_title: Catcher Bot
+#        cover_subtitle: PDF Version
+#        copyright: (C) 2023 Andrei Kuminov (akumidv)
+#        toc_title: Cover
+#        toc_level: 3
+#        output_path: ./help.pdf

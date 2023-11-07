@@ -1,4 +1,5 @@
-from model.strategy import Strategy
+from catcher_bot.model.strategy import Strategy
+
 
 class MockStrategy(Strategy):
     name = 'Mock strategy'

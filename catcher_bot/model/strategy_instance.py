@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
-from model.strategy import Strategy
-from model.strategy_config import StrategyConfig
+from catcher_bot.model.strategy import Strategy
+from catcher_bot.model.strategy_config import StrategyConfig
 from typing import List, Dict
 
 

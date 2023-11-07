@@ -1,3 +1,3 @@
 import pytest
-from core.bot_context import BotContext
+from catcher_bot.core.bot_context import BotContext
 

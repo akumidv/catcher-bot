@@ -3,7 +3,7 @@ import os
 import yaml
 import argparse
 from typing import Dict, Tuple
-from core import logger
+from catcher_bot.core import logger
 
 ENV_PREFIX = 'BOT'
 LOG_NAME = 'init'

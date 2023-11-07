@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field, asdict, InitVar
+from dataclasses import dataclass, field, asdict
 import yaml
 
 
@@ -19,8 +19,7 @@ class StrategyConfig:
         self.code = code
         self.parameters = dict() if parameters is None else parameters
         if len(exchanges_symbols) == 0:
-            raise ValueError(f'exchanges_symbols in strategy config {self.code} is empty')
-        # if isinstance(self.exchanges_symbols, dict):
+            raise ValueError(f'exchanges_symbols in strategy config {self.code} are empty')
         self.exchanges_symbols = [ExchangeConfig(**exchange_cfg) for exchange_cfg in exchanges_symbols]
 
 

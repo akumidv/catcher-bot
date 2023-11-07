@@ -1,7 +1,7 @@
 import io
 
 import pytest
-from view import plot
+from catcher_bot.view import plot
 
 
 import pandas as pd

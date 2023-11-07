@@ -1,2 +1,2 @@
 import pytest
-from core import config
+from catcher_bot.core import config

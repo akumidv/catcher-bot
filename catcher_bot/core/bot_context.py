@@ -1,7 +1,7 @@
-from core import logger
-from core import config
 import os
-from core import setup_strategies
+from catcher_bot.core import logger
+#from catcher_bot.core import config
+from catcher_bot.core import setup_strategies
 
 
 class BotContext:

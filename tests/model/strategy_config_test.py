@@ -1,10 +1,10 @@
-import os.path
+import os
 from dataclasses import is_dataclass
-import pytest
-from model.strategy_config import StrategyConfig, ExchangeConfig, get_empty_strategy_config
-import yaml
-from tests.context import MOCKS_DIR
 import logging
+import pytest
+import yaml
+from catcher_bot.model.strategy_config import StrategyConfig, ExchangeConfig, get_empty_strategy_config
+from tests.context import MOCKS_DIR
 
 
 log = logging.getLogger(os.path.basename(__file__)[:-3])

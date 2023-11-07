@@ -1,12 +1,12 @@
-import pytest
-from core import setup_strategies
-from model.strategy_config import StrategyConfig
-from model.strategy import Strategy
 import logging
+import os
+import pytest
+from catcher_bot.core import setup_strategies
+from catcher_bot.model.strategy_config import StrategyConfig
+from catcher_bot.model.strategy import Strategy
 from tests.model.strategy_instance_test import check_strategy_instance
 from tests.model.strategy_config_test import check_strategy_config
 from tests.context import MOCKS_DIR
-import os
 
 
 STRATEGIES_MOCK_PATH = f'{MOCKS_DIR}/strategies'

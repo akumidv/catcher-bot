@@ -7,7 +7,7 @@ import multiprocessing
 """
 
 #price = multiprocessing.Queue()
-from strategy_dispatcher import StrategyDispatcher
+from catcher_bot.controller.strategy_dispatcher import StrategyDispatcher
 
 
 class SubscriptionOrganizer:

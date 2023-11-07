@@ -3,12 +3,12 @@ import importlib
 import logging
 import os
 import sys
-
-from model.strategy import Strategy
-from model.strategy_instance import StrategyInstance
-from model.strategy_config import StrategyConfig, get_empty_strategy_config
 import inspect
 import yaml
+
+from catcher_bot.model.strategy import Strategy
+from catcher_bot.model.strategy_instance import StrategyInstance
+from catcher_bot.model.strategy_config import StrategyConfig, get_empty_strategy_config
 
 StrategyInitData = namedtuple("StrategyInitData", ['name', 'code', 'module'])
 

@@ -1,0 +1,5 @@
+[run]
+omit =
+    scripts/*
+    tests/*
+    log/*

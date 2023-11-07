@@ -4,7 +4,7 @@ from binance.client import AsyncClient, BinanceAPIException, Client
 # from binance.client import AsyncClient, BinanceAPIException
 from binance.streams import BinanceSocketManager
 
-from interface.exchange import exchange_class
+from catcher_bot.interface.exchange import exchange_class
 import logging
 
 

@@ -2,9 +2,9 @@
 WARNING. To show log in pycharm set additional arguments to "-s -o log_cli=true  -o log_cli_level=DEBUG"
 """
 import os
-import pytest
-from core import logger
 import logging
+import pytest
+from catcher_bot.core import logger
 
 
 def test_show_logger_lev():

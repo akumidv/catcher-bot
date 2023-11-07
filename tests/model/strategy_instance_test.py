@@ -1,11 +1,11 @@
-import pytest
-from model.strategy_instance import StrategyInstance
-from model.strategy import Strategy
-from tests.model.strategy_config_test import strategy_cfg_mock, strategy_cfg_dict
-from tests._mocks.strategies.mock_strategy import MockStrategy
-import yaml
-import logging
 import os
+import logging
+import pytest
+import yaml
+from catcher_bot.model.strategy_instance import StrategyInstance
+from catcher_bot.model.strategy import Strategy
+from tests.model.strategy_config_test import strategy_cfg_mock, strategy_cfg_dict
+from tests.mocks.strategies.mock_strategy import MockStrategy
 
 
 log = logging.getLogger(os.path.basename(__file__)[:-3])

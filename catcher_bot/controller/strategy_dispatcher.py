@@ -14,8 +14,8 @@
 """
 
 import os
-from core.bot_context import BotContext
 import multiprocessing
+from catcher_bot.core.bot_context import BotContext
 
 
 class StrategyDispatcher:

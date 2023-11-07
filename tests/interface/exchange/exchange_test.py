@@ -1,5 +1,5 @@
 import pytest
-#from interface.exchange import connector as exchange_connector
+#from catcher_bot.interface.exchange import connector as exchange_connector
 #
 #
 # def test_init_exchange():

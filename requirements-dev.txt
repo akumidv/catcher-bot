@@ -1,3 +1,6 @@
 pytest
 pytest-asyncio
+pylint
+pytest-cov
 coverage
+mkdocs

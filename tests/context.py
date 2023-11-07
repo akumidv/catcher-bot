@@ -1,10 +1,10 @@
 import pytest
 import os
-from core.bot_context import BotContext
-from core.config import _verify_config
+from catcher_bot.core.bot_context import BotContext
+from catcher_bot.core.config import _verify_config
 
 
-MOCKS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '_mocks'))
+MOCKS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), 'mocks'))
 
 test_bot_cfg = dict(
     exchanges=['binance'],

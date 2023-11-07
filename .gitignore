@@ -6,3 +6,6 @@
 # Coverage
 .coverage
 htmlcov
+
+#Mkdocs
+[Ss]ite/
