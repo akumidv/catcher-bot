@@ -1,7 +1,12 @@
+# TODO can be list of porfolios or they can be loaded from different files
 config_type: strategy
-code: 'MOCK_CFG'
-description: Mock strategy configuration
-parameters: null
+code: SMA_CROSS_9_21
+description: SMA Cross config
+strategy: SMA_CROSS
+parameters:
+  short_length: 9
+  long_length: 21
+
 #exchanges_symbols:
 #  - exchange_code: 'binance'
 #    type: 'future'

@@ -1,14 +1,6 @@
-# TODO to args
-
-exchanges:
-  - binance
-  #- kucoin
-
-market_types:
-#  - stock
-  - futures
-
-
+config_type: bot
+code: base_config
+description: Base config fot the bot
 logger:
   console: debug
   file: debug
@@ -18,16 +10,31 @@ telegram:
   chat_id: ''
   bot_token: ''
 
-credentials:
-  stock:
-    binance:
-      api_key: ''
-      secret_key: ''
 
-  futures:
-    binance:
-      api_key: ''
-      secret_key: ''
 
 strategies:
   path: 'strategies'
+
+exchanges:
+  path: null
+
+  # TODO to args
+
+  #exchanges:
+  #  - binance
+  #  #- kucoin
+
+  #market_types:
+  #  - stock
+  #  - futures
+
+#credentials:
+#  stock:
+#    binance:
+#      api_key: ''
+#      secret_key: ''
+#
+#  futures:
+#    binance:
+#      api_key: ''
+#      secret_key: ''
