@@ -2,8 +2,8 @@
 Main bot starting module
 """
 import os
-from catcher_bot.core.bot_config import prepare_bot_config
-from catcher_bot.core.component_configs import get_configs, ComponentConfigs
+from catcher_bot.core.bot_configurator import prepare_bot_config
+from catcher_bot.core.component_configs import load_configs, ComponentConfigs
 from catcher_bot.core.bot_context import BotContext
 from catcher_bot.controller.dispatcher import root
 

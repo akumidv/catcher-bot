@@ -1,0 +1,23 @@
+[project]
+name = "data acessor subscriptions"
+version = "0.0.1"
+authors = [
+    { name="Tony Star", email="ts@allasso.ch" },
+    { name="Akumidv", email="ak@allasso.ch" },
+]
+description = "Data Accessor Subscription"
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License ::  GPL-3.0",
+    "Operating System :: OS Independent",
+]
+license = {file = "LICENSE"}
+
+[project.urls]
+"Homepage" = "https://github.com/akumidv/catcher-bot"
+"Bug Tracker" = "https://github.com/akumidv/catcher-bot/issues"
+
+[tool.pytest.ini_options]
+pythonpath = "src"

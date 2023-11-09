@@ -4,7 +4,7 @@ import logging
 import pytest
 import yaml
 from catcher_bot.model.strategy_config import StrategyConfig, ExchangeConfig, get_empty_strategy_config
-from tests.context import MOCKS_DIR
+from tests.conftest import WORKING_FOLDER, STRATEGY_FOLDER
 
 
 log = logging.getLogger(os.path.basename(__file__)[:-3])
@@ -12,7 +12,7 @@ log = logging.getLogger(os.path.basename(__file__)[:-3])
 
 @pytest.fixture()
 def strategy_cfg_dict():
-    with open(f'{MOCKS_DIR}/strategies/mock_strategy.yaml', 'r') as file:
+    with open(f'{WORKING_FOLDER}/{STRATEGY_FOLDER}/mock_strategy.yaml', 'r') as file:
         strategy_cfg_d = yaml.safe_load(file)
     return strategy_cfg_d
 

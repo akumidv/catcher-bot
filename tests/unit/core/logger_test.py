@@ -1,3 +1,4 @@
+#pylint: disable=C0111,protected-access
 """
 WARNING. To show log in pycharm set additional arguments to "-s -o log_cli=true  -o log_cli_level=DEBUG"
 """

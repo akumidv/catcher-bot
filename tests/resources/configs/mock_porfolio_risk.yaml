@@ -1,0 +1,30 @@
+# Configuration file can be list if configuration (starting with -) or configuration for one
+
+# TODO can be list of porfolios or they can be loaded from different files
+
+config_type: portfolio
+code: risk_portfolio
+description: Risk portfolio
+
+components:
+  - strategy_config: SMA_CROSS_9_21
+    ratio: 0.5 # TODO size?
+    sources:
+      - exchange: binance_fut
+        instruments:
+          type: future
+          expirations: PERPETUAL
+          timeframe: 15m
+          symbols:
+            - BTCUSDT
+            - ETHUSDT
+
+
+#exchanges_symbols:
+#  - exchange_code: 'binance'
+#    type: 'future'
+#    symbols: # All?
+#      - BTCUSDT
+#      - ETHUSDT
+#    #black_list_symbols:
+#    #white_list_symbols:

@@ -4,7 +4,9 @@ extension-pkg-whitelist=numpy,talib,talib.abstract
 # init-hook="from pylint.config import find_pylintrc;"
 #          "import os, sys; sys.path.append(os.join(os.path.dirname(find_pylintrc()), 'src'))"
 #init-hook="from pylint.config import find_default_config_files; import os, sys; sys.path.append(os.path.join(list(find_default_config_files())[0], '../src'))"
-init-hook="import os, sys; sys.path.append(os.path.join(os.path.abspath(os.path.curdir), 'src'))"
+
+init-hook="import os, sys; sys.path += [os.path.join(os.path.abspath(os.path.curdir), 'src'), os.path.curdir]"
+
 [BASIC]
 good-names=logger
 ignore=vendor
@@ -23,3 +25,6 @@ notes=FIXME,XXX,TODO
 max-line-length=120
 # Regexp for a line that is allowed to be longer than the limit.
 ignore-long-lines=^\s*(# )?<?https?://\S+>?$
+
+[LOGGING]
+disable=logging-fstring-interpolation

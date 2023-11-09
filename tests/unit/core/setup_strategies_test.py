@@ -1,15 +1,16 @@
+#pylint: disable=C0111,protected-access
 import logging
 import os
 import pytest
 from catcher_bot.core import setup_strategies
 from catcher_bot.model.strategy_config import StrategyConfig
 from catcher_bot.model.strategy import Strategy
-from tests.model.strategy_instance_test import check_strategy_instance
-from tests.model.strategy_config_test import check_strategy_config
-from tests.context import MOCKS_DIR
+from tests.unit.model.strategy_instance_test import check_strategy_instance
+from tests.unit.model.strategy_config_test import check_strategy_config
+from tests.conftest import WORKING_FOLDER
 
 
-STRATEGIES_MOCK_PATH = f'{MOCKS_DIR}/strategies'
+STRATEGIES_MOCK_PATH = f'{WORKING_FOLDER}/strategies'
 
 log = logging.getLogger(os.path.basename(__file__)[:-3])
 

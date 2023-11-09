@@ -1,10 +1,11 @@
+#pylint: disable=C0111,protected-access
 import os
 import logging
 import pytest
 import yaml
 from catcher_bot.model.strategy_instance import StrategyInstance
 from catcher_bot.model.strategy import Strategy
-from tests.model.strategy_config_test import strategy_cfg_mock, strategy_cfg_dict
+from tests.unit.model.strategy_config_test import strategy_cfg_mock, strategy_cfg_dict
 from tests.resources.strategies.mock_strategy import MockStrategy
 
 

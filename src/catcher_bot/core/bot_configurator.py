@@ -37,12 +37,18 @@ def prepare_bot_config(bot_root_path: str) -> dict:
 
 
 def _verify_config(bot_cfg: dict):
+    if not isinstance(bot_cfg, dict):
+        raise TypeError('Bot config parameter "path" for components was not set')
     if 'path' not in bot_cfg:
-        raise KeyError('Config parameter "path" for components was not set')
+        raise KeyError('Bot config parameter "path" for components was not set')
     if not isinstance(bot_cfg['path'], dict):
-        raise TypeError('Config parameter "path" not content values of paths to components')
+        raise TypeError('Bot config parameter "path" not content values of paths to components')
     if 'config' not in bot_cfg['path']:
-        raise KeyError('Config parameter "path.config" for configurations was not set')
+        raise KeyError('Bot config parameter "path.config" for configurations was not set')
+    if '__working_dir' not in bot_cfg:
+        raise KeyError('Bot config parameter "__working_dir" is not automatically set')
+    if not os.path.isdir(bot_cfg['__working_dir' ]):
+        raise FileExistsError(f"Bot config working {bot_cfg['__working_dir' ]} directory is not exist")
     # if 'credentials' not in bot_cfg:
     #     raise KeyError('credentials are not set in bot cfg')
     # if 'exchanges' not in bot_cfg:
@@ -105,9 +111,12 @@ def _check_loaded_bot_config(bot_cfg: dict):
 
 def _update_config_from_env(bot_cfg: dict) -> dict:     # TODO update some config values from environment
     """update some config values from environment"""
-    if 'telegram' not in bot_cfg: bot_cfg['telegram'] = {'chat_id': '', 'bot_token': ''}
-    if os.getenv('TG_CHAT_ID'): bot_cfg['telegram']['chat_id'] = os.getenv('TG_CHAT_ID')
-    if os.getenv('TG_BOT_TOKEN'): bot_cfg['telegram']['bot_token'] = os.getenv('TG_BOT_TOKEN')
+    if 'telegram' not in bot_cfg:
+        bot_cfg['telegram'] = {'chat_id': '', 'bot_token': ''}
+    if os.getenv('TG_CHAT_ID'):
+        bot_cfg['telegram']['chat_id'] = os.getenv('TG_CHAT_ID')
+    if os.getenv('TG_BOT_TOKEN'):
+        bot_cfg['telegram']['bot_token'] = os.getenv('TG_BOT_TOKEN')
 
     # if 'credentials' not in bot_cfg: bot_cfg['credentials'] = {'stock': {}, 'futures': {}}
     # if 'binance' not in bot_cfg['credentials']: bot_cfg['credentials']['stock']['binance'] = {'api_key': '', 'secret_key': ''}
