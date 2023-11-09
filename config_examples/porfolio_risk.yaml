@@ -1,4 +1,7 @@
+# Configuration file can be list if configuration (starting with -) or configuration for one
+
 # TODO can be list of porfolios or they can be loaded from different files
+
 config_type: portfolio
 code: risk_portfolio
 description: Risk portfolio
@@ -15,7 +18,6 @@ components:
           symbols:
             - BTCUSDT
             - ETHUSDT
-
 
 
 #exchanges_symbols:

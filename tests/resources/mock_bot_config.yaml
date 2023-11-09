@@ -1,6 +1,6 @@
 config_type: bot
-code: base_config
-description: Base config fot the bot
+code: mock_config
+description: Mock config fot the bot
 logger:
   console: debug
   file: debug

@@ -1,12 +1,25 @@
 [MASTER]
 extension-pkg-whitelist=numpy,talib,talib.abstract
 
+# init-hook="from pylint.config import find_pylintrc;"
+#          "import os, sys; sys.path.append(os.join(os.path.dirname(find_pylintrc()), 'src'))"
+#init-hook="from pylint.config import find_default_config_files; import os, sys; sys.path.append(os.path.join(list(find_default_config_files())[0], '../src'))"
+init-hook="import os, sys; sys.path.append(os.path.join(os.path.abspath(os.path.curdir), 'src'))"
 [BASIC]
 good-names=logger
 ignore=vendor
+# Bad variable names which should always be refused, separated by a comma
+bad-names=foo,bar,baz,toto,tutu,tata,e
+#good-names=i,j,k
 
 [TYPECHECK]
 ignored-modules=numpy,talib,talib.abstract
 
+[MISCELLANEOUS]
+# List of note tags to take in consideration, separated by a comma.
+notes=FIXME,XXX,TODO
+
 [FORMAT]
 max-line-length=120
+# Regexp for a line that is allowed to be longer than the limit.
+ignore-long-lines=^\s*(# )?<?https?://\S+>?$

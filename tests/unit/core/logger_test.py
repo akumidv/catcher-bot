@@ -3,7 +3,6 @@ WARNING. To show log in pycharm set additional arguments to "-s -o log_cli=true 
 """
 import os
 import logging
-import pytest
 from catcher_bot.core import logger
 
 
