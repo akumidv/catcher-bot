@@ -1,5 +1,0 @@
-config_type: exchange
-code: binance_fut
-description: Binance
-type: future
-credentials: null # Also config from env, for example set with prefix _env_32324959?

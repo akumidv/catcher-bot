@@ -65,10 +65,16 @@ def _update_components_cfg(components_cfg: ComponentConfigs, comp_cfg: dict, cfg
             log.warning(f"Component config type \"{comp_cfg['config_type']}\" with code \"{comp_cfg['code']}\" "
                         f"from {cfg_path} already loaded. Skipped")
         else:
-            comp_cfg['__filepath'] = cfg_path
+            comp_cfg = _enrich_config(comp_cfg, cfg_path)
             getattr(components_cfg, comp_cfg['config_type'])[comp_cfg['code']] = comp_cfg
             log.debug(f"Loading component config \"{comp_cfg['config_type']}\" \"{comp_cfg['code']}\" from {cfg_path}")
     return components_cfg
+
+def _enrich_config(comp_cfg: dict, cfg_path):
+    comp_cfg['filepath'] = cfg_path
+    if 'description' not in cfg_path:
+        comp_cfg['description'] = ''
+    return comp_cfg
 
 
 def _check_configuration_structure(comp_cfg: dict, cfg_path: str) -> bool:
@@ -76,13 +82,18 @@ def _check_configuration_structure(comp_cfg: dict, cfg_path: str) -> bool:
     Verifying mandatory configuration structure
 
     """
+    status = True
     if not isinstance(comp_cfg, dict):
         log.warning(f"Component config {cfg_path} should be dictionary, not the {type(comp_cfg)}")
+        status = False
     elif 'config_type' not in comp_cfg:
         log.warning(f"Component config {cfg_path} should have \"config_type\" field")
+        status = False
     elif comp_cfg['config_type'] not in components_types:
         log.warning(f"{cfg_path} config type should be one of \"{components_types}\", "
                    f"current config type is \"{comp_cfg['config_type']}\"")
+        status = False
     elif 'code' not in comp_cfg:
         log.warning(f"Component config {cfg_path} should have \"code\" field")
-    return True
+        status = False
+    return status

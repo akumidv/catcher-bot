@@ -1,0 +1,5 @@
+config_type: strategy
+code: 'MOCK_BINANCE'
+description: Mock strategy configuration
+parameters: null
+strategy_code: MockStrategy

@@ -2,6 +2,7 @@
 Base class of configs
 """
 from dataclasses import dataclass, asdict
+
 import yaml
 
 

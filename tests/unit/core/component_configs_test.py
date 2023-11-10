@@ -30,8 +30,8 @@ def test__update_components_cfg(caplog, comp_strategy_config):
     strategies = getattr(components_cfg, 'strategy')
     strategy_code = comp_strategy_config['code']
     assert strategy_code in strategies
-    assert '__filepath' in strategies[strategy_code]
-    assert CONFIG_STRATEGY_FN == strategies[strategy_code]['__filepath']
+    assert 'filepath' in strategies[strategy_code]
+    assert CONFIG_STRATEGY_FN == strategies[strategy_code]['filepath']
     with caplog.at_level(logging.WARNING):
         component_configs._update_components_cfg(components_cfg, comp_strategy_config, CONFIG_STRATEGY_FN)
     assert f"with code \"{strategy_code}\" from" in caplog.text
@@ -52,3 +52,14 @@ def test__check_configuration_structure(caplog, comp_strategy_config):
         component_configs._check_configuration_structure({'config_type': 'strategy', 'code_wrong': 'CODE'},
                                                          CONFIG_STRATEGY_FN)
     assert "should have \"code\" field" in caplog.text
+
+
+def test__enrich_config(strategy_cfg_dict):
+    comp_cfg = strategy_cfg_dict.copy()
+    del comp_cfg['description']
+    comp_cfg = component_configs._enrich_config(comp_cfg, CONFIG_STRATEGY_FN)
+    assert 'description' in comp_cfg
+    comp_cfg = strategy_cfg_dict.copy()
+    del comp_cfg['filepath']
+    comp_cfg = component_configs._enrich_config(comp_cfg, CONFIG_STRATEGY_FN)
+    assert 'filepath' in comp_cfg and comp_cfg['filepath'] == CONFIG_STRATEGY_FN
