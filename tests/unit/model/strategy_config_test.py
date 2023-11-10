@@ -3,8 +3,8 @@ from dataclasses import is_dataclass
 import logging
 import pytest
 import yaml
-from catcher_bot.model.strategy_config import StrategyConfig, ExchangeConfig, get_empty_strategy_config
-from tests.conftest import WORKING_FOLDER, STRATEGY_FOLDER
+from catcher_bot.model.strategy_config import StrategyConfig#, ExchangeConfig, get_empty_strategy_config
+from tests.conftest import WORKING_FOLDER, CONFIGS_FOLDER, STRATEGY_FOLDER
 
 
 log = logging.getLogger(os.path.basename(__file__)[:-3])
@@ -12,13 +12,18 @@ log = logging.getLogger(os.path.basename(__file__)[:-3])
 
 @pytest.fixture()
 def strategy_cfg_dict():
-    with open(f'{WORKING_FOLDER}/{STRATEGY_FOLDER}/mock_strategy.yaml', 'r') as file:
+    fn = f'{WORKING_FOLDER}/{CONFIGS_FOLDER}/mock_strategy.yaml'
+    with open(fn, 'r', encoding='utf-8') as file:
         strategy_cfg_d = yaml.safe_load(file)
+    strategy_cfg_d['filepath'] = fn
     return strategy_cfg_d
 
 def check_strategy_configurations_dict(strategy_cfg_d: dict):
     assert isinstance(strategy_cfg_d, dict)
     assert 'code' in strategy_cfg_d
+    assert 'config_type' in strategy_cfg_d
+    assert 'description' in strategy_cfg_d
+    assert 'filepath' in strategy_cfg_d
 
 
 @pytest.fixture()
@@ -31,12 +36,9 @@ def check_strategy_config(strategy_cfg: StrategyConfig):
     assert not isinstance(strategy_cfg, type)
     assert isinstance(strategy_cfg, StrategyConfig)
     assert isinstance(strategy_cfg.code, str)
+    assert isinstance(strategy_cfg.config_type, str)
     assert isinstance(strategy_cfg.parameters, dict) or strategy_cfg.parameters is None
-    assert isinstance(strategy_cfg.exchanges_symbols, list)
-    assert len(strategy_cfg.exchanges_symbols) >= 0
-    exchange_cfg = strategy_cfg.exchanges_symbols[0]
-    assert is_dataclass(exchange_cfg)
-    assert isinstance(exchange_cfg, ExchangeConfig)
+
 
 
 def test_strategy_instance(strategy_cfg_dict):
@@ -52,10 +54,4 @@ def test_to_yaml(strategy_cfg_mock):
     assert strategy_cfg_dict_restored['code'] == strategy_cfg_mock.code
     print(yaml_str)
     print(strategy_cfg_dict_restored)
-
-
-def test_get_empty_strategy_config():
-    strategy_cfg = get_empty_strategy_config('TEST')
-    check_strategy_config(strategy_cfg)
-
 

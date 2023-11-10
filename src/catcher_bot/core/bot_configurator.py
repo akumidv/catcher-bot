@@ -2,18 +2,17 @@
 Configure module. Loading and parsing configs from bot configs and folder with bot configure
 """
 import os
+import argparse
 
 import yaml
-from typing import Dict, Tuple
-import argparse
+
 from catcher_bot.core import logger
 
 ENV_PREFIX = 'BOT'
 LOG_NAME = 'init'
 
-
-ARGS_PARAM_NAMES_TO_CHANGE_CFG = ['telegram_chat_id', 'telegram_bot_token'] # 'exchanges', 'trade_type', 'strategies_path'
-ARGS_PARAM_NAMES_WITH_LEVEL = ['telegram'] # , 'strategies'
+ARGS_PARAM_NAMES_TO_CHANGE_CFG = ['telegram_chat_id', 'telegram_bot_token'] # 'exchanges','trade_type','strategies_path'
+ARGS_PARAM_NAMES_WITH_LEVEL = ['telegram']  # , 'strategies'
 ARGS_PARAM_NAMES_FOR_BOT = ['cfg']
 
 log = logger.get_def_logger(LOG_NAME)  # logger.get_logger(LOG_NAME, bot_cfg.get('logger')) #
@@ -21,48 +20,18 @@ log = logger.get_def_logger(LOG_NAME)  # logger.get_logger(LOG_NAME, bot_cfg.get
 
 def prepare_bot_config(bot_root_path: str) -> dict:
     """
-    Prepare configure bot dictionary
+    Preparing configure bot dictionary
     """
     bot_working_dir = os.path.abspath(os.path.curdir)
     args = _get_args()
-    print(args)
     bot_cfg = _load_bot_config(args.cfg, bot_working_dir)
     _check_loaded_bot_config(bot_cfg)
     bot_cfg = _update_config_from_args(bot_cfg, args)
     bot_cfg = _update_config_from_env(bot_cfg)
-    bot_cfg['__working_dir'] = bot_working_dir
-    bot_cfg['__bot_root_path'] = bot_root_path
+    bot_cfg['path']['__working_dir'] = bot_working_dir
+    bot_cfg['path']['__bot_root_path'] = bot_root_path
     _verify_config(bot_cfg)
     return bot_cfg
-
-
-def _verify_config(bot_cfg: dict):
-    if not isinstance(bot_cfg, dict):
-        raise TypeError('Bot config parameter "path" for components was not set')
-    if 'path' not in bot_cfg:
-        raise KeyError('Bot config parameter "path" for components was not set')
-    if not isinstance(bot_cfg['path'], dict):
-        raise TypeError('Bot config parameter "path" not content values of paths to components')
-    if 'config' not in bot_cfg['path']:
-        raise KeyError('Bot config parameter "path.config" for configurations was not set')
-    if '__working_dir' not in bot_cfg:
-        raise KeyError('Bot config parameter "__working_dir" is not automatically set')
-    if not os.path.isdir(bot_cfg['__working_dir' ]):
-        raise FileExistsError(f"Bot config working {bot_cfg['__working_dir' ]} directory is not exist")
-    # if 'credentials' not in bot_cfg:
-    #     raise KeyError('credentials are not set in bot cfg')
-    # if 'exchanges' not in bot_cfg:
-    #     raise KeyError('exchanges are not set in bot cfg')
-    # if 'market_types' not in bot_cfg:
-    #     raise KeyError('market_types are not set in bot cfg')
-    # if 'strategies' not in bot_cfg or 'path' not in bot_cfg['strategies']:
-    #     raise KeyError('strategies path is not set in bot cfg')
-    # for exchange in bot_cfg['exchanges']:
-    #     for market_type in bot_cfg['market_types']:
-    #         if market_type not in bot_cfg['credentials']:
-    #             raise KeyError(f'Market type {market_type} credentials are not set in bot cfg')
-    #         if exchange not in bot_cfg['credentials'][market_type]:
-    #             raise KeyError(f'{exchange} exchange credentials are not set in bot cfg')
 
 
 def _get_args() -> argparse.Namespace:
@@ -95,10 +64,11 @@ def _load_bot_config(config_path: str, bot_working_dir: str) -> dict:
         raise FileNotFoundError(f'Config file "{config_path}" is not found from working(current) '
                                 f'directory "{bot_working_dir}')
 
-    with open(config_path, 'r') as fd:
+    with open(config_path, 'r', encoding='utf-8') as fd:
         bot_cfg = yaml.safe_load(fd)
 
     return bot_cfg
+
 
 def _check_loaded_bot_config(bot_cfg: dict):
     if not isinstance(bot_cfg, dict):
@@ -109,8 +79,10 @@ def _check_loaded_bot_config(bot_cfg: dict):
         raise ValueError(f'Bot config type should be equal "bot", current config is "{bot_cfg["config_type"]}"')
 
 
-def _update_config_from_env(bot_cfg: dict) -> dict:     # TODO update some config values from environment
-    """update some config values from environment"""
+def _update_config_from_env(bot_cfg: dict) -> dict: # TODO update some config values from environment
+    """
+    Updating some config values from environment
+    """
     if 'telegram' not in bot_cfg:
         bot_cfg['telegram'] = {'chat_id': '', 'bot_token': ''}
     if os.getenv('TG_CHAT_ID'):
@@ -119,15 +91,21 @@ def _update_config_from_env(bot_cfg: dict) -> dict:     # TODO update some confi
         bot_cfg['telegram']['bot_token'] = os.getenv('TG_BOT_TOKEN')
 
     # if 'credentials' not in bot_cfg: bot_cfg['credentials'] = {'stock': {}, 'futures': {}}
-    # if 'binance' not in bot_cfg['credentials']: bot_cfg['credentials']['stock']['binance'] = {'api_key': '', 'secret_key': ''}
-    # if os.getenv('BINANCE_API_KEY'): bot_cfg['credentials']['stock']['binance']['secret_key'] = os.getenv('BINANCE_API_KEY')
-    # if os.getenv('BINANCE_SECRET_KEY'): bot_cfg['credentials']['stock']['binance']['secret_key'] = os.getenv('BINANCE_SECRET_KEY')
+    # if 'binance' not in bot_cfg['credentials']:
+    #   bot_cfg['credentials']['stock']['binance'] = {'api_key': '', 'secret_key': ''}
+    # if os.getenv('BINANCE_API_KEY'):
+    #   bot_cfg['credentials']['stock']['binance']['secret_key'] = os.getenv('BINANCE_API_KEY')
+    # if os.getenv('BINANCE_SECRET_KEY'):
+    #   bot_cfg['credentials']['stock']['binance']['secret_key'] = os.getenv('BINANCE_SECRET_KEY')
 
     log.debug('Config updated by environment arguments')
     return bot_cfg
 
 
 def _update_config_from_args(bot_cfg: dict, args: argparse.Namespace) -> dict:
+    """
+    Updating some bot configure variables from args
+    """
     changed_params = []
     for name in vars(args):
         if name in ARGS_PARAM_NAMES_FOR_BOT or name not in ARGS_PARAM_NAMES_TO_CHANGE_CFG:
@@ -145,7 +123,38 @@ def _update_config_from_args(bot_cfg: dict, args: argparse.Namespace) -> dict:
             bot_cfg[group_name][second_level_name] = arg_value
         else:
             bot_cfg[name] = arg_value
-    if len(changed_params):
+    if len(changed_params) != 0:
         log.debug(f'Config updated by app arguments: {",".join(changed_params)}')
     return bot_cfg
 
+
+def _verify_config(bot_cfg: dict):
+    """
+    Verifying mandatory bot config structure
+    """
+    if not isinstance(bot_cfg, dict):
+        raise TypeError('Bot config parameter "path" for components was not set')
+    if 'path' not in bot_cfg:
+        raise KeyError('Bot config parameter "path" for components was not set')
+    if not isinstance(bot_cfg['path'], dict):
+        raise TypeError('Bot config parameter "path" not content values of paths to components')
+    if 'config' not in bot_cfg['path']:
+        raise KeyError('Bot config parameter "path.config" for configurations was not set')
+    if '__working_dir' not in bot_cfg['path']:
+        raise KeyError('Bot config parameter "__working_dir" is not automatically set')
+    if not os.path.isdir(bot_cfg['path']['__working_dir' ]):
+        raise FileExistsError(f"Bot config working {bot_cfg['path']['__working_dir' ]} directory is not exist")
+    # if 'credentials' not in bot_cfg:
+    #     raise KeyError('credentials are not set in bot cfg')
+    # if 'exchanges' not in bot_cfg:
+    #     raise KeyError('exchanges are not set in bot cfg')
+    # if 'market_types' not in bot_cfg:
+    #     raise KeyError('market_types are not set in bot cfg')
+    # if 'strategies' not in bot_cfg or 'path' not in bot_cfg['strategies']:
+    #     raise KeyError('strategies path is not set in bot cfg')
+    # for exchange in bot_cfg['exchanges']:
+    #     for market_type in bot_cfg['market_types']:
+    #         if market_type not in bot_cfg['credentials']:
+    #             raise KeyError(f'Market type {market_type} credentials are not set in bot cfg')
+    #         if exchange not in bot_cfg['credentials'][market_type]:
+    #             raise KeyError(f'{exchange} exchange credentials are not set in bot cfg')

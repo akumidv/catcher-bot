@@ -3,7 +3,7 @@ import os
 import pytest
 import yaml
 
-from catcher_bot.core.bot_context import BotContext
+from catcher_bot.model.bot_context import BotContext
 from catcher_bot.core.bot_configurator import _verify_config
 from catcher_bot.core.component_configs import ComponentConfigs
 
@@ -13,6 +13,7 @@ CONFIGS_FOLDER = 'configs'
 STRATEGY_FOLDER = 'strategies'
 CONFIG_BOT_FN = 'mock_bot_config.yaml'
 CONFIG_STRATEGY_FN = 'mock_strategy.yaml'
+STRATEGY_FN = 'mock_strategy.py'
 
 
 
@@ -31,8 +32,9 @@ _test_bot_cfg = {
      #    'futures': {'binance': {'api_key': '', 'secret_key': ''}}
     # },
     # strategies = {'path': 'strategies'}
-    'path': {'config': CONFIGS_FOLDER},
-    '__working_dir': WORKING_FOLDER
+    'path': {'config': CONFIGS_FOLDER,
+             '__working_dir': WORKING_FOLDER},
+
 }
 
 

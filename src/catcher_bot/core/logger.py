@@ -1,30 +1,40 @@
+"""
+Bot logger
+"""
+
 import datetime
-from typing import Optional, Union, Dict
+from typing import Optional, Dict
 import logging
 import os
 import sys
-from logging.handlers import TimedRotatingFileHandler, RotatingFileHandler
+from logging.handlers import TimedRotatingFileHandler #, RotatingFileHandler
 
 
-LOG_NAME = 'bot'
-FORMAT_STR = '%(asctime)s [%(levelname)-7s] %(name)10s: %(message)s'
-FORMAT_STR_ERROR = '%(asctime)s [%(levelname)-7s] %(name)10s %(filename)s:%(funcName)s:%(lineno)-3d: %(message)s'
-FORMAT_STR_FILE = '%(asctime)s [%(levelname)-7s] %(name)10s %(filename)s:%(lineno)-3d: %(message)s'
-DATE_FORMAT_STR = '%Y-%m-%d %H:%M:%S'
-HANDLERS = []
-MIN_LEVEL = logging.INFO
+LOG_NAME: str = 'bot'
+FORMAT_STR: str = '%(asctime)s [%(levelname)-7s] %(name)10s: %(message)s'
+FORMAT_STR_ERROR: str = '%(asctime)s [%(levelname)-7s] %(name)10s %(filename)s:%(funcName)s:%(lineno)-3d: %(message)s'
+FORMAT_STR_FILE: str = '%(asctime)s [%(levelname)-7s] %(name)10s %(filename)s:%(lineno)-3d: %(message)s'
+DATE_FORMAT_STR: str = '%Y-%m-%d %H:%M:%S'
+HANDLERS: list = []
+MIN_LEVEL: int = logging.INFO
 
-LOG_FOLDER = os.path.abspath(os.path.join(os.path.curdir, 'log')) # TODO to config
+LOG_FOLDER: str = os.path.abspath(os.path.join(os.path.curdir, 'log')) # TODO to config
 
 
 def get_def_logger(name):
+    """
+    Preparing bot logger
+    """
     return logging.getLogger(name)
 
 
-def init(levels: Optional[Dict] = None):
+def _init(levels: Optional[Dict] = None):
+    """
+    Initializing bol logger
+    """
     global HANDLERS
     global MIN_LEVEL
-    HANDLERS = list()
+    HANDLERS = []
     handlers, set_level = _get_handlers_and_min_level(levels)
     HANDLERS.extend(handlers)
     if set_level is not None:
@@ -32,8 +42,11 @@ def init(levels: Optional[Dict] = None):
 
 
 def get_logger(module_name: Optional[str] = None, init_levels: Optional[Dict] = None) -> logging.Logger:
+    """
+    Get logger with current configurations
+    """
     if len(HANDLERS) == 0:
-        init(init_levels)
+        _init(init_levels)
     name = LOG_NAME
     if module_name is not None:
         name = f'{LOG_NAME}:{module_name}'
@@ -42,24 +55,25 @@ def get_logger(module_name: Optional[str] = None, init_levels: Optional[Dict] = 
     module_logger.setLevel(MIN_LEVEL)
     #module_logger.handlers = HANDLERS
     for handler in HANDLERS:
-      module_logger.addHandler(handler)
+        module_logger.addHandler(handler)
     return module_logger
 
 
-def _get_logger_type(log_level=None, default='warning'):
+def _get_logger_type(log_level_name=None, default='warning'):
     all_log_levels = ['info', 'debug', 'warning', 'error', 'critical']
-    if not isinstance(log_level, str) or log_level.lower() not in all_log_levels:
-        log_level = default if isinstance(default, str) and default in all_log_levels else 'warning'
-    log_level = log_level.lower()
-    if log_level == 'debug':
-        return logging.DEBUG
-    elif log_level == 'warning':
-        return logging.WARNING
-    elif log_level == 'error':
-        return logging.ERROR
-    elif log_level == 'critical':
-        return logging.CRITICAL
-    return logging.INFO
+    if not isinstance(log_level_name, str) or log_level_name.lower() not in all_log_levels:
+        log_level_name = default if isinstance(default, str) and default in all_log_levels else 'warning'
+    log_level_name = log_level_name.lower()
+    log_level = logging.INFO
+    if log_level_name == 'debug':
+        log_level = logging.DEBUG
+    elif log_level_name == 'warning':
+        log_level = logging.WARNING
+    elif log_level_name == 'error':
+        log_level = logging.ERROR
+    elif log_level_name == 'critical':
+        log_level = logging.CRITICAL
+    return log_level
 
 
 def _get_log_formatter(fmt=FORMAT_STR_ERROR) -> logging.Formatter:
@@ -67,12 +81,15 @@ def _get_log_formatter(fmt=FORMAT_STR_ERROR) -> logging.Formatter:
 
 
 class LevelFilter(logging.Filter):
+    """
+    Filtering for levels
+    """
     def __init__(self, level, name=""):
         super(LevelFilter, self).__init__(name)
         self.level = level
 
     def filter(self, record):  # non-zero return means we log this message
-        return True if record.levelno < self.level else False
+        return True if record.levelno < self.level else False # TODO fix and test
 
 
 def _get_handlers_and_min_level(levels: Optional[Dict] = None):

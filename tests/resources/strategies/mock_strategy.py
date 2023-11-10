@@ -1,7 +1,13 @@
+"""
+Mosck strategy module
+"""
 from catcher_bot.model.strategy import Strategy
 
 
 class MockStrategy(Strategy):
+    """
+    Mock strategy for testing
+    """
     name = 'Mock strategy'
 
     def __init__(self):
@@ -9,5 +15,6 @@ class MockStrategy(Strategy):
 
     def next(self):
         print('#### NEXT')
-        pass
 
+    def init(self):
+        pass

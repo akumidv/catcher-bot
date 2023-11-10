@@ -1,13 +1,16 @@
-from dataclasses import dataclass, field
+"""
+Strategy instance class
+"""
+from dataclasses import dataclass
 from catcher_bot.model.strategy import Strategy
-from catcher_bot.model.strategy_config import StrategyConfig
-from typing import List, Dict
 
 
 @dataclass(frozen=True)
-class StrategyInstance: # TODO should be instance or have sence init in child process with data and control pipes?
+class StrategyInstance:
+    """
+    Strategy code module with base parameters
+    """
     module: type[Strategy]
     filepath: str
     name: str
     code: str
-    configs: list[StrategyConfig]
