@@ -6,7 +6,7 @@ from catcher_bot.model.strategy import Strategy
 
 
 @dataclass(frozen=True)
-class StrategyInstance:
+class StrategyModule:
     """
     Strategy code module with base parameters
     """

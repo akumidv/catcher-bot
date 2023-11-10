@@ -3,11 +3,15 @@ Exchange config
 """
 from dataclasses import dataclass
 
-from catcher_bot.model.config import Config
+from catcher_bot.model.config.base import BaseConfig
+
+
+# TODO test
+# TODO different connectors - exchanges, providers, source files
 
 
 @dataclass(frozen=True)
-class ExchangeConfig(Config):
+class ExchangeConfig(BaseConfig):
     """
     Exchange config class
     """

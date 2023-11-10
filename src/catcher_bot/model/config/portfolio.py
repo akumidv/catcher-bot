@@ -3,11 +3,14 @@ Portfolio strategy instance
 """
 from dataclasses import dataclass
 
-from catcher_bot.model.config import Config
+from catcher_bot.model.config.base import BaseConfig
 
+
+# TODO test
+# TODO parsing for timeframes, expirations, option strikes, symbold, exchanges
 
 @dataclass(frozen=True)
-class PortfolioConfig(Config):
+class PortfolioConfig(BaseConfig):
     """
     Portfolio configs
     """

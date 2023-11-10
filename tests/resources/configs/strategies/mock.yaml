@@ -1,0 +1,8 @@
+config_type: strategy
+code: MockStrategy_base
+description: Mock
+strategy: MockStrategy
+parameters: null
+  #short_length: 9
+  #long_length: 21
+

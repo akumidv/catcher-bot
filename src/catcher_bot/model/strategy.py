@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 
 
+
 class Strategy:
     __metaclass__ = ABCMeta
     code = __name__
@@ -16,4 +17,5 @@ class Strategy:
     @abstractmethod
     def init(self):
         """Init"""
+
 

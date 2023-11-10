@@ -10,7 +10,7 @@ import inspect
 from typing import Union
 
 from catcher_bot.model.strategy import Strategy
-from catcher_bot.model.strategy_instance import StrategyInstance
+from catcher_bot.model.strategy_module import StrategyModule
 
 StrategyInitData = namedtuple("StrategyInitData", ['name', 'code', 'module'])
 
@@ -18,7 +18,7 @@ STRATEGY_FOLDER_MAX_DEPTH = 2
 
 STRATEGY_NAME_ATTR = 'name'
 
-def process(strategies_path: str, log: logging.Logger) -> list[StrategyInstance]:
+def process(strategies_path: str, log: logging.Logger) -> list[StrategyModule]:
     """
     Importing strategies modules
     """
@@ -43,12 +43,12 @@ def _prepare_modules_file_names_list(strategies_path: str) -> list:
     return modules_fn
 
 
-def _prepare_strategy_instance(module_path: str) -> Union[StrategyInstance, None]:
+def _prepare_strategy_instance(module_path: str) -> Union[StrategyModule, None]:
     strategy_init = _get_strategy_init_data(module_path)
     if not isinstance(strategy_init, StrategyInitData):
         return None
-    strategy_instance = StrategyInstance(module=strategy_init.module, filepath=module_path,
-                                         name=strategy_init.name, code=strategy_init.code)
+    strategy_instance = StrategyModule(module=strategy_init.module, filepath=module_path,
+                                       name=strategy_init.name, code=strategy_init.code)
     return strategy_instance
 
 

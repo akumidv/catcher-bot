@@ -3,7 +3,7 @@ from dataclasses import is_dataclass
 import logging
 import pytest
 import yaml
-from catcher_bot.model.strategy_config import StrategyConfig#, ExchangeConfig, get_empty_strategy_config
+from catcher_bot.model.config.strategy import StrategyConfig#, ExchangeConfig, get_empty_strategy_config
 from tests.conftest import WORKING_FOLDER, CONFIGS_FOLDER, STRATEGY_FOLDER
 
 

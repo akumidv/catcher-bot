@@ -3,6 +3,7 @@ Different types that used everywhere
 """
 from enum import Enum
 
+# TODO tests
 
 class BasedType(Enum):
     """
@@ -49,3 +50,28 @@ class MarketType(BasedType):
     EQUITY = 0, 'equity'
     COMMODITIES = 1, 'commodities'
     CRYPTO = 2, 'crypto'
+
+
+class ExpirationDistance(BasedType):
+    """
+    Expirations for futures and options in sequence from nearest to far
+    """
+    ALL = None, None  # null in yaml or absent field
+    PERPETUAL = 0, 'PERPETUAL'
+    FIRST = 1, 1
+    SECOND = 2, 2
+    THIRD = 3, 3
+    FOURTH = 4, 4
+    FIFTH = 5, 5
+
+
+class StrikeDistance(BasedType):
+    """
+    Strikes distance from strike at price
+    """
+    ALL = None, None  # null in yaml or absent field
+    FIRST = 1, 1
+    SECOND = 2, 2
+    THIRD = 3, 3
+    FOURTH = 4, 4
+    FIFTH = 5, 5

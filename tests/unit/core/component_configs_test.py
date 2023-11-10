@@ -2,7 +2,7 @@
 import logging
 
 from catcher_bot.core import component_configs
-from catcher_bot.model.strategy_config import StrategyConfig
+from catcher_bot.model.config.strategy import StrategyConfig
 
 from tests.conftest import CONFIG_STRATEGY_FN
 from tests.unit.model.strategy_config_test import strategy_cfg_dict

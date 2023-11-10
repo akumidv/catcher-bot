@@ -7,7 +7,7 @@ import yaml
 
 
 @dataclass(frozen=True)
-class Config:
+class BaseConfig:
     """
     Base Config class
     """

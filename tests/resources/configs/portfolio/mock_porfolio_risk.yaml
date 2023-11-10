@@ -13,14 +13,26 @@ components:
       - connector_code: binance_futures
         # TODO how to code PERPETUAL? expirations? options? Timeframes for dif symbols
         symbols: # * -all symbols except black_list?, null for instruments
-          - BTCUSDT
+          - BTCUSDT:
+            timeframes: 1D # In additional to timeframes
+            expirations: # Null for all
+              - PERPETUAL # or 0
+              - 1 # first and etc - similar to tradingview EG!1
+            strikes:
+              put: 5 # 5 strikes from the nearest in both directions
+              call: 5 # 5 from the nearest in both directions
           - ETHUSDT
-        timeframes:
-          - '15m'
-        certain_instruments:
-          - 'BTCUSDT,1D'
+        common:
+          timeframes:
+            - '15m'
+          expirations:
+            - PERPETUAL
+          strikes:
+            put: 1 # 1 from the nearest
+            call: 1 # 1 from the nearest
 
-    #    #black_list_symbols:
+        black_list_symbols:
+          - SOLUSDT # If symbols do not set.
     #    #white_list_symbols:
     actions:
       - connector_code: binance_futures

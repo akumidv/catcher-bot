@@ -7,7 +7,7 @@ import pytest
 from catcher_bot.core import import_strategies
 from catcher_bot.model.strategy import Strategy
 
-from tests.unit.model.strategy_instance_test import check_strategy_instance
+from tests.unit.model.strategy_module_test import  check_strategy_module
 from tests.conftest import WORKING_FOLDER, STRATEGY_FOLDER, STRATEGY_FN
 
 
@@ -21,7 +21,7 @@ def test_process():
     assert isinstance(strategies, list)
     assert len(strategies) > 0
     strategy_inst = strategies[0]
-    check_strategy_instance(strategy_inst)
+    check_strategy_module(strategy_inst)
 
 
 def test__prepare_modules_file_names_list():
@@ -34,7 +34,7 @@ def test__prepare_modules_file_names_list():
 
 def test__prepare_strategy_instance():
     strategy_instance = import_strategies._prepare_strategy_instance(f"{STRATEGIES_MOCK_PATH}/{STRATEGY_FN}")
-    check_strategy_instance(strategy_instance)
+    check_strategy_module(strategy_instance)
 
 
 def test__prepare_strategy_instance_wrong():

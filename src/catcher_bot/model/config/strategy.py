@@ -3,12 +3,12 @@ Strategy configuration class
 """
 from dataclasses import dataclass, field
 
-from catcher_bot.model.config import Config
+from catcher_bot.model.config.base import BaseConfig
 
 from catcher_bot.model.namespace import MarketType, InstrumentType
 
 @dataclass(frozen=True)
-class StrategyConfig(Config):
+class StrategyConfig(BaseConfig):
     """
     Strategy configuration structure
     """

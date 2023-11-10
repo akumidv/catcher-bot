@@ -3,7 +3,7 @@ from dataclasses import is_dataclass
 import logging
 import pytest
 import yaml
-from catcher_bot.model.config import Config
+from catcher_bot.model.config.base import BaseConfig
 from tests.conftest import WORKING_FOLDER, CONFIGS_FOLDER
 
 
@@ -29,14 +29,14 @@ def check_configurations_dict(strategy_cfg_d: dict):
 
 
 @pytest.fixture()
-def cfg_mock(cfg_dict) -> Config:
-    return Config(**cfg_dict)
+def cfg_mock(cfg_dict) -> BaseConfig:
+    return BaseConfig(**cfg_dict)
 
 
-def check_config(strategy_cfg: Config):
+def check_config(strategy_cfg: BaseConfig):
     assert is_dataclass(strategy_cfg)
     assert not isinstance(strategy_cfg, type)
-    assert isinstance(strategy_cfg, Config)
+    assert isinstance(strategy_cfg, BaseConfig)
     assert isinstance(strategy_cfg.code, str)
     assert isinstance(strategy_cfg.config_type, str)
 
@@ -44,7 +44,7 @@ def check_config(strategy_cfg: Config):
 
 def test_config_instance(cfg_dict):
     check_configurations_dict(cfg_dict)
-    strategy_cfg = Config(**cfg_dict)
+    strategy_cfg = BaseConfig(**cfg_dict)
     check_config(strategy_cfg)
 
 

@@ -7,10 +7,10 @@ from collections import namedtuple
 import yaml
 
 from catcher_bot.core import logger
-from catcher_bot.model.strategy_config import StrategyConfig
-from catcher_bot.model.portfolio_config import PortfolioConfig
-from catcher_bot.model.exchange_config import ExchangeConfig
-from catcher_bot.model.config import Config
+from catcher_bot.model.config.strategy import StrategyConfig
+from catcher_bot.model.config.portfolio import PortfolioConfig
+from catcher_bot.model.config.connector import ExchangeConfig
+from catcher_bot.model.config.base import BaseConfig
 
 LOG_NAME = 'init'
 ENV_PREFIX = 'BOT'
@@ -46,7 +46,7 @@ def load_configs(bot_cfg: dict) -> ComponentConfigs:
     return components_config_instances
 
 
-def _init_configs(configs_dict: dict, config_class: Config) -> dict:
+def _init_configs(configs_dict: dict, config_class: BaseConfig) -> dict:
     """
     Initialization portfolio configs from dict
     """
