@@ -9,8 +9,9 @@ import yaml
 from catcher_bot.core import logger
 from catcher_bot.model.config.strategy import StrategyConfig
 from catcher_bot.model.config.portfolio import PortfolioConfig
-from catcher_bot.model.config.connector import ExchangeConfig
+from catcher_bot.model.config.connector import ConnectorConfig
 from catcher_bot.model.config.base import BaseConfig
+from catcher_bot.model.namespace import ModuleType
 
 LOG_NAME = 'init'
 ENV_PREFIX = 'BOT'
@@ -40,19 +41,28 @@ def load_configs(bot_cfg: dict) -> ComponentConfigs:
                     components_cfg = _update_components_cfg(components_cfg, cfg_item, cfg_path)
             else:
                 components_cfg = _update_components_cfg(components_cfg, cfg, cfg_path)
-    components_config_instances = ComponentConfigs(strategy=_init_configs(components_cfg.strategy, StrategyConfig),
-                                                   portfolio=_init_configs(components_cfg.portfolio, PortfolioConfig),
-                                                   exchange=_init_configs(components_cfg.exchange, ExchangeConfig))
+    components_config_instances = ComponentConfigs(strategy=_init_config(components_cfg.strategy, ModuleType.STRATEGY),
+                                                   portfolio=_init_config(components_cfg.portfolio,
+                                                                          ModuleType.PORTFOLIO),
+                                                   connector=_init_config(components_cfg.exchange,
+                                                                          ModuleType.CONNECTOR))
     return components_config_instances
 
 
-def _init_configs(configs_dict: dict, config_class: BaseConfig) -> dict:
+def _init_config(configs_dict: dict, config_class_type: ModuleType) -> dict:
     """
     Initialization portfolio configs from dict
     """
     instances = {}
     for config_code in configs_dict:
-        instances[config_code] = config_class(**configs_dict[config_code])
+        if config_class_type == ModuleType.STRATEGY:
+            instances[config_code] = StrategyConfig(**configs_dict[config_code])
+        elif config_class_type == ModuleType.PORTFOLIO:
+            instances[config_code] = PortfolioConfig(**configs_dict[config_code])
+        elif config_class_type == ModuleType.CONNECTOR:
+            instances[config_code] = ConnectorConfig(**configs_dict[config_code])
+        else:
+            raise ValueError(f"Unknown config class type {ModuleType}")
     return instances
 
 

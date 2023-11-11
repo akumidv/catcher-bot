@@ -75,3 +75,11 @@ class StrikeDistance(BasedType):
     THIRD = 3, 3
     FOURTH = 4, 4
     FIFTH = 5, 5
+
+class ModuleType(Enum):
+    """
+    Loaded and configured nodule types
+    """
+    PORTFOLIO = 0
+    CONNECTOR =1
+    STRATEGY= 2

@@ -1,14 +1,18 @@
+"""
+Module with base strategy class
+"""
 from abc import ABCMeta, abstractmethod, abstractproperty
 from dataclasses import dataclass
 
 
-
-
 class Strategy:
+    """
+    Strategy base class
+    """
+
     __metaclass__ = ABCMeta
     code = __name__
     description = __doc__
-    name = 'Strategy interface' # TODO Does it really needed?
 
     @abstractmethod
     def next(self):
@@ -17,5 +21,3 @@ class Strategy:
     @abstractmethod
     def init(self):
         """Init"""
-
-

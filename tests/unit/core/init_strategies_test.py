@@ -30,15 +30,15 @@ def test__prepare_modules_file_names_list():
     assert len(modules_fn) > 0
     for module_fn in modules_fn:
         assert WORKING_FOLDER in module_fn
-        assert module_fn[len(WORKING_FOLDER):].count(os.sep) <= import_strategies.STRATEGY_FOLDER_MAX_DEPTH
+        assert module_fn[len(WORKING_FOLDER):].count(os.sep) <= import_strategies.MODULE_FOLDER_MAX_DEPTH
 
 def test__prepare_strategy_instance():
-    strategy_instance = import_strategies._prepare_strategy_instance(f"{STRATEGIES_MOCK_PATH}/{STRATEGY_FN}")
+    strategy_instance = import_strategies._get_module_instance(f"{STRATEGIES_MOCK_PATH}/{STRATEGY_FN}")
     check_strategy_module(strategy_instance)
 
 
 def test__prepare_strategy_instance_wrong():
-    strategy_instance = import_strategies._prepare_strategy_instance(__file__)
+    strategy_instance = import_strategies._get_module_instance(__file__)
     assert strategy_instance is None
 
 
@@ -46,7 +46,7 @@ def test__prepare_strategy_instance_wrong():
 def test_get_strategy_init_data(module_fn):
     module_path = f'{STRATEGIES_MOCK_PATH}/{module_fn}'
     strategy_init = import_strategies._get_strategy_init_data(module_path)
-    assert isinstance(strategy_init, import_strategies.StrategyInitData)
+    assert isinstance(strategy_init, import_strategies.ModuleInitData)
     assert hasattr(strategy_init, 'name')
     assert hasattr(strategy_init, 'code')
     assert hasattr(strategy_init, 'module')

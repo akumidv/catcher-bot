@@ -11,11 +11,11 @@ from catcher_bot.model.config.base import BaseConfig
 
 
 @dataclass(frozen=True)
-class ExchangeConfig(BaseConfig):
+class ConnectorConfig(BaseConfig):
     """
     Exchange config class
     """
-    exchange_code: str
+    connector_code: str
     type: str
     symbols: list
 

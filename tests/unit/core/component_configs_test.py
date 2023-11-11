@@ -20,7 +20,7 @@ def test_load_configs(bot_config):
 def test__init_configs(strategy_cfg_dict):
     configs_dict = {}
     configs_dict[strategy_cfg_dict['code']] = strategy_cfg_dict
-    component_configs._init_configs(configs_dict, StrategyConfig)
+    component_configs._init_config(configs_dict, StrategyConfig)
 
 
 
