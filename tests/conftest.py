@@ -12,7 +12,10 @@ WORKING_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), 'resour
 CONFIGS_FOLDER = 'configs'
 STRATEGY_FOLDER = 'strategies'
 CONFIG_BOT_FN = 'mock_bot_config.yaml'
-CONFIG_STRATEGY_FN = 'mock_strategy.yaml'
+CONFIG_STRATEGY_FN = 'strategies/mock_strategy.yaml'
+CONFIG_PORTFOLIO_FN = 'portfolio/mock_portfolio_risk.yaml'
+CONFIG_CONNECTOR_STOCK_FN = 'portfolio/mock_binance_stock.yaml'
+CONFIG_CONNECTORS_DEREVIATEVE_FN = 'portfolio/mock_binance_derivatives.yaml'
 STRATEGY_FN = 'mock_strategy.py'
 
 

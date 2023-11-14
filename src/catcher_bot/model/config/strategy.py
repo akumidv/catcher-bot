@@ -7,6 +7,7 @@ from catcher_bot.model.config.base import BaseConfig
 
 from catcher_bot.model.namespace import MarketType, InstrumentType
 
+
 @dataclass(frozen=True)
 class StrategyConfig(BaseConfig):
     """

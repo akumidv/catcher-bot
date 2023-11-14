@@ -13,13 +13,14 @@ from catcher_bot.model.strategy import Strategy
 from catcher_bot.model.connector import Connector
 from catcher_bot.model.portfolio import Portfolio
 from catcher_bot.model.module import Module
+from catcher_bot.model.namespace import ModuleType
 
 ModuleInitData = namedtuple("ModuleInitData", ['code', 'module', 'filepath'])
 
 MODULE_FOLDER_MAX_DEPTH = 2
 
 
-def process(modules_path: str, module_type: str, log: logging.Logger) -> list[Module]:
+def process(modules_path: str, module_type: ModuleType, log: logging.Logger) -> list[Module]:
     """
     Importing modules
     """
@@ -44,12 +45,12 @@ def _prepare_modules_file_names_list(strategies_path: str) -> list:
     return modules_fn
 
 
-def _get_module_instance(module_path: str, module_type: str) -> Union[Module, None]:
-    if module_type == 'Strategy':
+def _get_module_instance(module_path: str, module_type: ModuleType) -> Union[Module, None]:
+    if module_type == ModuleType.STRATEGY:
         module_class = Strategy
-    elif module_type == 'Connector':
+    elif module_type == ModuleType.CONNECTOR:
         module_class = Connector
-    elif module_type == 'Portfolio':
+    elif module_type == ModuleType.PORTFOLIO:
         module_class = Portfolio
     else:
         raise ValueError(f"Unknown importing module type: {module_type}")

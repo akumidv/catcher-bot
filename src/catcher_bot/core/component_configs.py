@@ -3,23 +3,27 @@ Configure module. Loading and parsing configs from bot configs and folder with b
 """
 import os
 from collections import namedtuple
-
+from typing import Hashable, Callable
 import yaml
 
 from catcher_bot.core import logger
 from catcher_bot.model.config.strategy import StrategyConfig
 from catcher_bot.model.config.portfolio import PortfolioConfig
 from catcher_bot.model.config.connector import ConnectorConfig
-from catcher_bot.model.config.base import BaseConfig
 from catcher_bot.model.namespace import ModuleType
 
-LOG_NAME = 'init'
-ENV_PREFIX = 'BOT'
+LOG_NAME = 'init configs'
 
 log = logger.get_def_logger(LOG_NAME)
 
-components_types = ('strategy', 'portfolio', 'exchange')
+components_types = ('strategy', 'portfolio', 'connector')
 ComponentConfigs = namedtuple('ComponentConfigs', components_types)
+
+CONFIG_CLASSES: dict[Hashable, Callable[..., object]] = {
+    ModuleType.STRATEGY: StrategyConfig,
+    ModuleType.PORTFOLIO: PortfolioConfig,
+    ModuleType.CONNECTOR: ConnectorConfig
+}
 
 
 def load_configs(bot_cfg: dict) -> ComponentConfigs:
@@ -27,8 +31,19 @@ def load_configs(bot_cfg: dict) -> ComponentConfigs:
     Loading all component configurations from path that set in bot config yaml
     """
     root_config_path = os.path.join(bot_cfg['path']['__working_dir'], bot_cfg['path']['config'])
+    components_cfg = _load_configs(root_config_path)
+    components_config_instances = ComponentConfigs(strategy=_process_configs_fabric(components_cfg.strategy,
+                                                                                    ModuleType.STRATEGY),
+                                                   portfolio=_process_configs_fabric(components_cfg.portfolio,
+                                                                                     ModuleType.PORTFOLIO),
+                                                   connector=_process_configs_fabric(components_cfg.connector,
+                                                                                     ModuleType.CONNECTOR))
+    return components_config_instances
+
+
+def _load_configs(root_config_path: str) -> ComponentConfigs:
     log.debug(f"Path to load component configs: {root_config_path}")
-    components_cfg = ComponentConfigs(strategy={}, portfolio={}, exchange={})
+    components_cfg = ComponentConfigs(strategy={}, portfolio={}, connector={})
     for path, _, files in os.walk(root_config_path):
         for fn in files:
             if not str(fn).endswith('.yaml'):
@@ -41,28 +56,20 @@ def load_configs(bot_cfg: dict) -> ComponentConfigs:
                     components_cfg = _update_components_cfg(components_cfg, cfg_item, cfg_path)
             else:
                 components_cfg = _update_components_cfg(components_cfg, cfg, cfg_path)
-    components_config_instances = ComponentConfigs(strategy=_init_config(components_cfg.strategy, ModuleType.STRATEGY),
-                                                   portfolio=_init_config(components_cfg.portfolio,
-                                                                          ModuleType.PORTFOLIO),
-                                                   connector=_init_config(components_cfg.exchange,
-                                                                          ModuleType.CONNECTOR))
-    return components_config_instances
+    return components_cfg
 
 
-def _init_config(configs_dict: dict, config_class_type: ModuleType) -> dict:
+def _process_configs_fabric(configs_dict: dict, config_class_type: ModuleType) -> dict:
     """
     Initialization portfolio configs from dict
     """
+
     instances = {}
+    class_ = CONFIG_CLASSES.get(config_class_type)
+    if class_ is None:
+        raise ValueError(f"Unknown config class type {config_class_type}")
     for config_code in configs_dict:
-        if config_class_type == ModuleType.STRATEGY:
-            instances[config_code] = StrategyConfig(**configs_dict[config_code])
-        elif config_class_type == ModuleType.PORTFOLIO:
-            instances[config_code] = PortfolioConfig(**configs_dict[config_code])
-        elif config_class_type == ModuleType.CONNECTOR:
-            instances[config_code] = ConnectorConfig(**configs_dict[config_code])
-        else:
-            raise ValueError(f"Unknown config class type {ModuleType}")
+        instances[config_code] = class_(**configs_dict[config_code])
     return instances
 
 
@@ -79,6 +86,7 @@ def _update_components_cfg(components_cfg: ComponentConfigs, comp_cfg: dict, cfg
             getattr(components_cfg, comp_cfg['config_type'])[comp_cfg['code']] = comp_cfg
             log.debug(f"Loading component config \"{comp_cfg['config_type']}\" \"{comp_cfg['code']}\" from {cfg_path}")
     return components_cfg
+
 
 def _enrich_config(comp_cfg: dict, cfg_path):
     comp_cfg['filepath'] = cfg_path
@@ -101,7 +109,7 @@ def _check_configuration_structure(comp_cfg: dict, cfg_path: str) -> bool:
         status = False
     elif comp_cfg['config_type'] not in components_types:
         log.warning(f"{cfg_path} config type should be one of \"{components_types}\", "
-                   f"current config type is \"{comp_cfg['config_type']}\"")
+                    f"current config type is \"{comp_cfg['config_type']}\"")
         status = False
     elif 'code' not in comp_cfg:
         log.warning(f"Component config {cfg_path} should have \"code\" field")

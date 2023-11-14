@@ -1,3 +1,5 @@
+#pylint: disable=C0111,protected-access
+
 import os
 from dataclasses import is_dataclass
 import logging
