@@ -6,7 +6,7 @@ import logging
 import pytest
 import yaml
 from catcher_bot.model.config.strategy import StrategyConfig#, ExchangeConfig, get_empty_strategy_config
-from tests.conftest import WORKING_FOLDER, CONFIGS_FOLDER, STRATEGY_FOLDER
+from tests.conftest import WORKING_FOLDER, CONFIGS_FOLDER, CONFIG_STRATEGY_FN
 
 
 log = logging.getLogger(os.path.basename(__file__)[:-3])
@@ -14,7 +14,7 @@ log = logging.getLogger(os.path.basename(__file__)[:-3])
 
 @pytest.fixture()
 def strategy_cfg_dict():
-    fn = f'{WORKING_FOLDER}/{CONFIGS_FOLDER}/mock_strategy.yaml'
+    fn = f'{WORKING_FOLDER}/{CONFIGS_FOLDER}/{CONFIG_STRATEGY_FN}'
     with open(fn, 'r', encoding='utf-8') as file:
         strategy_cfg_d = yaml.safe_load(file)
     strategy_cfg_d['filepath'] = fn

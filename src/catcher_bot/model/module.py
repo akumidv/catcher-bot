@@ -1,5 +1,5 @@
 """
-Base module instance class
+Base instance class for module laoding form path that set by user
 """
 from dataclasses import dataclass
 

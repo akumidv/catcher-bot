@@ -9,11 +9,10 @@ import sys
 import inspect
 from typing import Union
 
-from catcher_bot.model.strategy import Strategy
-from catcher_bot.model.connector import Connector
-from catcher_bot.model.portfolio import Portfolio
+
 from catcher_bot.model.module import Module
 from catcher_bot.model.namespace import ModuleType
+from catcher_bot.model.config.module_type import CONFIG_CLASSES
 
 ModuleInitData = namedtuple("ModuleInitData", ['code', 'module', 'filepath'])
 
@@ -46,14 +45,10 @@ def _prepare_modules_file_names_list(strategies_path: str) -> list:
 
 
 def _get_module_instance(module_path: str, module_type: ModuleType) -> Union[Module, None]:
-    if module_type == ModuleType.STRATEGY:
-        module_class = Strategy
-    elif module_type == ModuleType.CONNECTOR:
-        module_class = Connector
-    elif module_type == ModuleType.PORTFOLIO:
-        module_class = Portfolio
-    else:
+    module_class = CONFIG_CLASSES.get(module_type)
+    if module_class is None:
         raise ValueError(f"Unknown importing module type: {module_type}")
+
     module_name = os.path.basename(module_path)[:-3]
     spec = importlib.util.spec_from_file_location(module_name, module_path)
     _strategy_module = importlib.util.module_from_spec(spec)

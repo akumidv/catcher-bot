@@ -3,14 +3,13 @@ Configure module. Loading and parsing configs from bot configs and folder with b
 """
 import os
 from collections import namedtuple
-from typing import Hashable, Callable
+
 import yaml
 
 from catcher_bot.core import logger
-from catcher_bot.model.config.strategy import StrategyConfig
-from catcher_bot.model.config.portfolio import PortfolioConfig
-from catcher_bot.model.config.connector import ConnectorConfig
+
 from catcher_bot.model.namespace import ModuleType
+from catcher_bot.model.config.module_type import CONFIG_CLASSES
 
 LOG_NAME = 'init configs'
 
@@ -18,12 +17,6 @@ log = logger.get_def_logger(LOG_NAME)
 
 components_types = ('strategy', 'portfolio', 'connector')
 ComponentConfigs = namedtuple('ComponentConfigs', components_types)
-
-CONFIG_CLASSES: dict[Hashable, Callable[..., object]] = {
-    ModuleType.STRATEGY: StrategyConfig,
-    ModuleType.PORTFOLIO: PortfolioConfig,
-    ModuleType.CONNECTOR: ConnectorConfig
-}
 
 
 def load_configs(bot_cfg: dict) -> ComponentConfigs:
@@ -68,7 +61,9 @@ def _process_configs_fabric(configs_dict: dict, config_class_type: ModuleType) -
     class_ = CONFIG_CLASSES.get(config_class_type)
     if class_ is None:
         raise ValueError(f"Unknown config class type {config_class_type}")
+
     for config_code in configs_dict:
+        print(configs_dict[config_code])
         instances[config_code] = class_(**configs_dict[config_code])
     return instances
 

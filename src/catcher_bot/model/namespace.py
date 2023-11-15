@@ -4,7 +4,6 @@ Different types that used everywhere
 from enum import Enum
 from typing import Union
 
-
 class BasedType(Enum):
     """
     Base class of types
@@ -54,7 +53,6 @@ class InstrumentType(BasedType):
     """
     Instrument types
     """
-
     # Name, Code
     STOCK = 0
     FUTURE = 1
@@ -89,10 +87,9 @@ class StrikeDistance(BasedType):
     """
     Strikes distance from strike at price
     """
-    ALL = None, None  # null in yaml or absent field
+    ALL = None  # null in yaml or absent field
     FIRST = 1
     SECOND = 2
     THIRD = 3
     FOURTH = 4
     FIFTH = 5
-

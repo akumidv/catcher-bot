@@ -9,10 +9,11 @@ from catcher_bot.core.component_configs import ComponentConfigs
 
 
 WORKING_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), 'resources'))
-CONFIGS_FOLDER = 'configs'
 STRATEGY_FOLDER = 'strategies'
+CONFIGS_FOLDER = 'configs'
 CONFIG_BOT_FN = 'mock_bot_config.yaml'
-CONFIG_STRATEGY_FN = 'strategies/mock_strategy.yaml'
+CONFIG_STRATEGY_FN = 'strategies/mock.yaml'
+CONFIG_STRATEGY_FUT_FN = 'strategies/mock_futures.yaml'
 CONFIG_PORTFOLIO_FN = 'portfolio/mock_portfolio_risk.yaml'
 CONFIG_CONNECTOR_STOCK_FN = 'portfolio/mock_binance_stock.yaml'
 CONFIG_CONNECTORS_DEREVIATEVE_FN = 'portfolio/mock_binance_derivatives.yaml'
