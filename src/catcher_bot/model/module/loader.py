@@ -1,11 +1,11 @@
 """
-Base instance class for module laoding form path that set by user
+Base instance class for module loading form path that set by user
 """
 from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
-class Module:
+class ModuleLoader:
     """
     Base module
     """

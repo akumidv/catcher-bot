@@ -10,7 +10,7 @@ import inspect
 from typing import Union
 
 
-from catcher_bot.model.module import Module
+from catcher_bot.model.module.loader import ModuleLoader
 from catcher_bot.model.namespace import ModuleType
 from catcher_bot.model.config.module_type import CONFIG_CLASSES
 
@@ -19,7 +19,7 @@ ModuleInitData = namedtuple("ModuleInitData", ['code', 'module', 'filepath'])
 MODULE_FOLDER_MAX_DEPTH = 2
 
 
-def process(modules_path: str, module_type: ModuleType, log: logging.Logger) -> list[Module]:
+def process(modules_path: str, module_type: ModuleType, log: logging.Logger) -> list[ModuleLoader]:
     """
     Importing modules
     """
@@ -44,7 +44,7 @@ def _prepare_modules_file_names_list(strategies_path: str) -> list:
     return modules_fn
 
 
-def _get_module_instance(module_path: str, module_type: ModuleType) -> Union[Module, None]:
+def _get_module_instance(module_path: str, module_type: ModuleType) -> Union[ModuleLoader, None]:
     module_class = CONFIG_CLASSES.get(module_type)
     if module_class is None:
         raise ValueError(f"Unknown importing module type: {module_type}")

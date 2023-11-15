@@ -1,7 +1,7 @@
 """
 Mosck strategy module
 """
-from catcher_bot.model.strategy import Strategy
+from catcher_bot.model.module.strategy import Strategy
 from catcher_bot.model.namespace import MarketType, InstrumentType
 
 

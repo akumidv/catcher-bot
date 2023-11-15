@@ -1,4 +1,4 @@
-
+#pylint: disable=C0111,protected-access
 from catcher_bot.model import namespace as ns
 from catcher_bot.model.config.module_type import CONFIG_CLASSES
 

@@ -1,10 +1,10 @@
+#pylint: disable=C0111,protected-access
 import os
 from dataclasses import is_dataclass
 import logging
 import pytest
 import yaml
 from catcher_bot.model.config.base import BaseConfig
-from tests.conftest import WORKING_FOLDER, CONFIGS_FOLDER
 
 
 log = logging.getLogger(os.path.basename(__file__)[:-3])
@@ -39,7 +39,6 @@ def check_config(strategy_cfg: BaseConfig):
     assert isinstance(strategy_cfg, BaseConfig)
     assert isinstance(strategy_cfg.code, str)
     assert isinstance(strategy_cfg.config_type, str)
-
 
 
 def test_config_instance(cfg_dict):
