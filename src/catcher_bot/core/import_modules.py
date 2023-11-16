@@ -11,7 +11,7 @@ from typing import Union
 
 from catcher_bot.model.module.loader import ModuleLoader
 from catcher_bot.model.namespace import ModuleType
-from catcher_bot.model.config.module_type import CONFIG_CLASSES
+from catcher_bot.model.module.type import MODULE_CLASSES
 
 ModuleInitData = namedtuple("ModuleInitData", ['code', 'module', 'filepath'])
 
@@ -26,9 +26,9 @@ def process(modules_path: str, module_type: ModuleType, log: logging.Logger) -> 
     modules_fn = _prepare_modules_file_names_list(modules_path)
     for module_fn in modules_fn:
         module_instance = _get_module_instance(module_fn, module_type)
-        if module_fn is not None:
+        if module_instance is not None:
             modules.append(module_instance)
-            log.info(f"Found {module_type} \"{module_instance.name}\" [class \"{module_instance.code}\"] from "
+            log.info(f"Found {module_type} \"{module_instance.code}\" from "
                      f"file {module_instance.filepath}")
     return modules
 
@@ -44,7 +44,7 @@ def _prepare_modules_file_names_list(strategies_path: str) -> list:
 
 
 def _get_module_instance(module_path: str, module_type: ModuleType) -> Union[ModuleLoader, None]:
-    module_class = CONFIG_CLASSES.get(module_type)
+    module_class = MODULE_CLASSES.get(module_type)
     if module_class is None:
         raise ValueError(f"Unknown importing module type: {module_type}")
 
@@ -57,8 +57,9 @@ def _get_module_instance(module_path: str, module_type: ModuleType) -> Union[Mod
     module_instance = None
     for attr_name in module_attributes:
         attribute_instance = getattr(_strategy_module, attr_name)
-        if attr_name != module_type and inspect.isclass(attribute_instance) and \
+        if not module_type.is_equal_name(attr_name) and inspect.isclass(attribute_instance) and \
            issubclass(attribute_instance, module_class):
-            module_instance = module_class(code=attr_name, class_instance=attribute_instance)
+            module_instance = ModuleLoader(code=attr_name, class_instance=attribute_instance,
+                                           filepath=module_path)
             break
     return module_instance

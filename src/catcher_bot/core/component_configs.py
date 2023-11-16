@@ -60,10 +60,9 @@ def _process_configs_fabric(configs_dict: dict, config_class_type: ModuleType) -
     instances = {}
     class_ = CONFIG_CLASSES.get(config_class_type)
     if class_ is None:
-        raise ValueError(f"Unknown config class type {config_class_type}")
+        raise ValueError(f"Unknown config class type {config_class_type.name}")
 
     for config_code in configs_dict:
-        print(configs_dict[config_code])
         instances[config_code] = class_(**configs_dict[config_code])
     return instances
 

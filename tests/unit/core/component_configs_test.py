@@ -3,9 +3,10 @@ import logging
 
 from catcher_bot.core import component_configs
 from catcher_bot.model.config.strategy import StrategyConfig
+from catcher_bot.model.namespace import ModuleType
 
 from tests.conftest import CONFIG_STRATEGY_FN
-from tests.unit.model.config.strategy_test import strategy_cfg_dict
+from tests.unit.model.config.strategy_config_test import strategy_cfg_dict
 
 LOGGER = logging.getLogger(__name__)
 
@@ -20,7 +21,9 @@ def test_load_configs(bot_config):
 def test__init_configs(strategy_cfg_dict):
     configs_dict = {}
     configs_dict[strategy_cfg_dict['code']] = strategy_cfg_dict
-    component_configs._process_configs_fabric(configs_dict, StrategyConfig)
+    cfg = component_configs._process_configs_fabric(configs_dict, ModuleType.STRATEGY)
+    instance_key = list(cfg.keys())[0]
+    assert isinstance(cfg[instance_key], StrategyConfig)
 
 
 

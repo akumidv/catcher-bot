@@ -5,4 +5,4 @@ from catcher_bot.model.bot_context import BotContext
 
 def test_init():
     bc = app.init()
-    assert issubclass(bc, BotContext)
+    assert isinstance(bc, BotContext)
