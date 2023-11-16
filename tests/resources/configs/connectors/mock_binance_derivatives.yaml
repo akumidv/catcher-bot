@@ -1,17 +1,17 @@
-- config_type: connector #exchange
-  connection_type: exchange
-  connection_code: BinanceFutures
-  market_type: future
-  instrument_type: crypto
+- config_type: connector
   code: binance_future_base
+  connector_code: BinanceFutures
+#  connector_type: exchange
+#  market_type: future
+#  instrument_type: crypto
   credentials: null # Also config from env, for example set with prefix _env_32324959?
   description: Binance crypto futures
 
-- config_type: connector #exchange
-  connection_type: exchange
-  connection_code: BinanceOptions
-  market_type: option
-  instrument_type: crypto
+- config_type: connector
+  connector_type: exchange
+#  connector_code: BinanceOptions
+#  market_type: option
+#  instrument_type: crypto
   code: binance_option_base
   credentials: null # Also config from env, for example set with prefix _env_32324959?
-  description: Binance crypto optins
+  description: Binance crypto options

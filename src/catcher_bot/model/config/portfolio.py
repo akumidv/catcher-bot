@@ -9,7 +9,7 @@ from catcher_bot.model.config.base import BaseConfig
 # TODO test
 # TODO parsing for timeframes, expirations, option strikes, symbold, exchanges
 
-@dataclass(frozen=True)
+@dataclass(frozen=False)
 class PortfolioConfig(BaseConfig):
     """
     Portfolio configs

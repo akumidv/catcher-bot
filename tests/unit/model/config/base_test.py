@@ -39,6 +39,8 @@ def check_config(strategy_cfg: BaseConfig):
     assert isinstance(strategy_cfg, BaseConfig)
     assert isinstance(strategy_cfg.code, str)
     assert isinstance(strategy_cfg.config_type, str)
+    assert isinstance(strategy_cfg.description, str)
+    assert isinstance(strategy_cfg.filepath, str)
 
 
 def test_config_instance(cfg_dict):

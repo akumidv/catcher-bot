@@ -10,7 +10,7 @@ components:
   - strategy_config_code: MOCK_BINANCE_FUTURES_15m
     ratio: 0.5 # TODO size?
     sources:
-      - connector_code: binance_futures
+      - connector_config_code: binance_futures
         # TODO how to code PERPETUAL? expirations? options? Timeframes for dif symbols
         symbols: # * -all symbols except black_list?, null for instruments
           - BTCUSDT:
@@ -35,4 +35,4 @@ components:
           - SOLUSDT # If symbols do not set.
     #    #white_list_symbols:
     actions:
-      - connector_code: binance_futures
+      - connector_config_code: binance_futures

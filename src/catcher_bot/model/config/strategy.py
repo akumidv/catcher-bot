@@ -8,15 +8,13 @@ from catcher_bot.model.config.base import BaseConfig
 from catcher_bot.model.namespace import MarketType, InstrumentType
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=False)
 class StrategyConfig(BaseConfig):
     """
     Strategy configuration structure
     """
+    strategy_code: str
     parameters: dict = field(default_factory=dict)
-    instrument_types: list[InstrumentType] = None
-    market_types: list[MarketType] = None
-    timeframes: list = None
 
     # def __init__(self, code: str, parameters: dict = None): # exchanges_symbols: list[dict],
     #     self.code = code

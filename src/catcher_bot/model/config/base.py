@@ -6,7 +6,7 @@ from dataclasses import dataclass, asdict
 import yaml
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=False)
 class BaseConfig:
     """
     Base Config class

@@ -11,11 +11,18 @@ class BasedType(Enum):
     def __str__(self):
         return str(self.value)
 
-    def string_equal(self, string_value: str):
+    def is_equal_name(self, name: str):
         """
         Compare by name
         """
-        return str(self.name).lower() == string_value.lower()
+        return str(self.name).upper() == name.upper()
+
+    @classmethod
+    def is_valid_name(cls, id_val: str):
+        """
+        Compare by name
+        """
+        return hasattr(cls, id_val.upper())
 
     @classmethod
     def get_by_id(cls, id_val: Union[int, str, object]):
@@ -68,6 +75,16 @@ class MarketType(BasedType):
     EQUITY = 0
     COMMODITIES = 1
     CRYPTO = 2
+
+
+class ConnectorType(BasedType):
+    """
+    Conntector types
+    """
+
+    # Name          Code
+    EXCHANGE = 0
+
 
 
 class ExpirationDistance(BasedType):

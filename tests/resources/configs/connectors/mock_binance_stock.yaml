@@ -1,8 +1,8 @@
 config_type: connector
-connection_type: exchange
-connection_code: BinanceStock
-market_type: stock
-instrument_type: crypto
 code: binance_stock_base
-credentials: null # Also config from env, for example set with prefix _env_32324959?
 description: Binance crypto stock
+connector_code: BinanceStock
+#connector_type: exchange
+#market_type: stock
+#instrument_type: crypto
+credentials: null # Also config from env, for example set with prefix _env_32324959?

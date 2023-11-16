@@ -16,6 +16,17 @@ def test_get_by_id():
         _ = ns.ModuleType.get_by_id(-1)
 
 
+def test_is_valid_name():
+    assert ns.ModuleType.is_valid_name('STRATEGY')
+    assert not ns.ModuleType.is_valid_name('WRONG_TYPE')
+
+
+def test_is_equal_name():
+    strategy_type = ns.ModuleType['STRATEGY']
+    assert strategy_type.is_equal_name('Strategy')
+    assert not strategy_type.is_equal_name('WRONG_TYPE')
+
+
 def test_module_type_valid():
     assert ns.ModuleType.PORTFOLIO
     assert ns.ModuleType['PORTFOLIO']
@@ -23,6 +34,7 @@ def test_module_type_valid():
     assert ns.ModuleType['CONNECTOR']
     assert ns.ModuleType.STRATEGY
     assert ns.ModuleType['STRATEGY']
+
 
 def test_module_type_names():
     """

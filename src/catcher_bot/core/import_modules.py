@@ -9,7 +9,6 @@ import sys
 import inspect
 from typing import Union
 
-
 from catcher_bot.model.module.loader import ModuleLoader
 from catcher_bot.model.namespace import ModuleType
 from catcher_bot.model.config.module_type import CONFIG_CLASSES
