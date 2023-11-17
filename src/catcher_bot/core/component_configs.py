@@ -5,6 +5,7 @@ import os
 from collections import namedtuple
 
 import yaml
+import os
 
 from catcher_bot.core import logger
 
@@ -19,11 +20,12 @@ components_types = ('strategy', 'portfolio', 'connector')
 ComponentConfigs = namedtuple('ComponentConfigs', components_types)
 
 
-def load_configs(bot_cfg: dict) -> ComponentConfigs:
+def load_configs(cfg_path: dict) -> ComponentConfigs:
     """
     Loading all component configurations from path that set in bot config yaml
     """
-    root_config_path = os.path.join(bot_cfg['path']['__working_dir'], bot_cfg['path']['config'])
+    root_config_path = cfg_path['config'] if cfg_path['config'].startswith(os.path.sep) else \
+                       os.path.join(cfg_path['__working_dir'], cfg_path['config'])
     components_cfg = _load_configs(root_config_path)
     components_config_instances = ComponentConfigs(strategy=_process_configs_fabric(components_cfg.strategy,
                                                                                     ModuleType.STRATEGY),
