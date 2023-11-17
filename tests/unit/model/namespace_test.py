@@ -61,11 +61,12 @@ def test_instrument_type_valid():
     assert ns.InstrumentType.OPTION
     assert ns.InstrumentType['OPTION']
 
+
 def test_instrument_type_names():
     """
     If changed there should be changes everywhere
     """
-    names = sorted({'STOCK', 'FUTURE', 'OPTION'})
+    names = sorted({'STOCK', 'FUTURE_PERPETUAL', 'FUTURE', 'OPTION'})
     assert len(ns.InstrumentType) == len(names)
     current_names = sorted([code for code in dir(ns.InstrumentType) if not code.startswith('_')])
     assert current_names == names
@@ -109,8 +110,8 @@ def test_expiration_distance_valid():
     assert ns.ExpirationDistance.ALL
     assert ns.ExpirationDistance['ALL']
     assert ns.ExpirationDistance.ALL.value is None
-    assert ns.ExpirationDistance.PERPETUAL
-    assert ns.ExpirationDistance['PERPETUAL']
+    # assert ns.ExpirationDistance.PERPETUAL
+    # assert ns.ExpirationDistance['PERPETUAL']
     assert ns.ExpirationDistance.FIRST
     assert ns.ExpirationDistance['FIRST']
     assert ns.ExpirationDistance.SECOND
@@ -127,7 +128,7 @@ def test_expiration_distance_names():
     """
     If changed there should be changes everywhere
     """
-    names = sorted({'ALL', 'PERPETUAL', 'FIRST', 'SECOND', 'THIRD', 'FOURTH', 'FIFTH'})
+    names = sorted({'ALL', 'FIRST', 'SECOND', 'THIRD', 'FOURTH', 'FIFTH'}) # 'PERPETUAL',
     assert len(ns.ExpirationDistance) == len(names)
     current_names = sorted([code for code in dir(ns.ExpirationDistance) if not code.startswith('_')])
     assert current_names == names

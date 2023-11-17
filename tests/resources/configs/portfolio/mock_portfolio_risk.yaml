@@ -6,13 +6,13 @@ config_type: portfolio
 code: BASE_RISK_PORTFOLIO
 description: Risk portfolio by limit to 50% of deposit
 
-components:
+composition:
   - strategy_config_code: MOCK_BINANCE_FUTURES_15m
     ratio: 0.5 # TODO size?
     sources:
       - connector_config_code: binance_futures
         # TODO how to code PERPETUAL? expirations? options? Timeframes for dif symbols
-        symbols: # * -all symbols except black_list?, null for instruments
+        assets: # * -all symbols except black_list?, null for instruments
           - BTCUSDT:
             timeframes: 1D # In additional to timeframes
             expirations: # Null for all
@@ -31,7 +31,7 @@ components:
             put: 1 # 1 from the nearest
             call: 1 # 1 from the nearest
 
-        black_list_symbols:
+        black_list:
           - SOLUSDT # If symbols do not set.
     #    #white_list_symbols:
     actions:

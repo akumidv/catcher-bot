@@ -12,7 +12,7 @@ class MockStrategy(Strategy):
 
     name = 'Mock strategy' # TODO Does it really needed?
     market_type = [MarketType.CRYPTO, MarketType.EQUITY, MarketType.COMMODITIES] # TODO check when import module
-    instrument_type = [InstrumentType.STOCK, InstrumentType.FUTURE] # TODO check when import module
+    instrument_type = [InstrumentType.STOCK, InstrumentType.FUTURE_PERPETUAL] # TODO check when import module
 
     def __init__(self):
         print('#### Mock Strategy INIT')

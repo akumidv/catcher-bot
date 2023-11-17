@@ -62,8 +62,9 @@ class InstrumentType(BasedType):
     """
     # Name, Code
     STOCK = 0
-    FUTURE = 1
-    OPTION = 2
+    FUTURE_PERPETUAL = 1
+    FUTURE = 2
+    OPTION = 3
 
 
 class MarketType(BasedType):
@@ -92,7 +93,7 @@ class ExpirationDistance(BasedType):
     Expirations for futures and options in sequence from nearest to far
     """
     ALL = None  # null in yaml or absent field
-    PERPETUAL = 0
+    # PERPETUAL = 0
     FIRST = 1
     SECOND = 2
     THIRD = 3
