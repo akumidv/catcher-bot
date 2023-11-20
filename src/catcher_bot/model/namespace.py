@@ -4,6 +4,11 @@ Different types that used everywhere
 from enum import Enum
 from typing import Union
 
+
+def get_names(type_class: type[Enum]):
+    return [type_val.name for type_val in type_class]
+
+
 class BasedType(Enum):
     """
     Base class of types

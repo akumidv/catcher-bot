@@ -14,15 +14,17 @@ from tests.conftest import WORKING_FOLDER, STRATEGY_FOLDER, STRATEGY_FN
 
 STRATEGIES_MOCK_PATH = f'{WORKING_FOLDER}/{STRATEGY_FOLDER}'
 
+
 log = logging.getLogger(os.path.basename(__file__)[:-3])
 
 
 def test_process_for_strategy():
-    strategies = import_modules.process(STRATEGIES_MOCK_PATH, ModuleType.STRATEGY, log)
+    modules = import_modules.import_modules({'strategies': STRATEGY_FOLDER, '__working_dir': WORKING_FOLDER})
+    strategies = modules.strategy
     assert isinstance(strategies, list)
     assert len(strategies) > 0
     strategy_inst = strategies[0]
-    check_module(strategy_inst)
+    check_module(strategy_inst, Strategy)
 
 
 def test__prepare_modules_file_names_list():
@@ -38,7 +40,7 @@ def test__prepare_strategy_instance():
     strategy_fn = f"{STRATEGIES_MOCK_PATH}/{STRATEGY_FN}"
     assert os.path.isfile(strategy_fn)
     strategy_instance = import_modules._get_module_instance(strategy_fn, ModuleType.STRATEGY)
-    check_module(strategy_instance)
+    check_module(strategy_instance, Strategy)
 
 
 def test__prepare_strategy_instance_wrong():

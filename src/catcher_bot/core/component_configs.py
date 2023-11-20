@@ -65,7 +65,10 @@ def _process_configs_fabric(configs_dict: dict, config_class_type: ModuleType) -
         raise ValueError(f"Unknown config class type {config_class_type.name}")
 
     for config_code in configs_dict:
-        instances[config_code] = class_(**configs_dict[config_code])
+        try:
+            instances[config_code] = class_(**configs_dict[config_code])
+        except TypeError as err:
+            log.warning(f"Config {configs_dict[config_code]['filepath']} contain unknown attributes: {err}. Skipped loading")
     return instances
 
 

@@ -6,7 +6,9 @@ import os
 from catcher_bot.core import logger
 from catcher_bot.core import import_modules
 from catcher_bot.core.component_configs import ComponentConfigs
+from catcher_bot.core.import_modules import Modules
 from catcher_bot.model.namespace import ModuleType
+
 
 class BotContext:
     """
@@ -14,14 +16,16 @@ class BotContext:
     """
     LOG_NAME = 'catcher_bot'
 
-    def __init__(self, bot_cfg: dict, component_configs: ComponentConfigs):
+    def __init__(self, bot_cfg: dict, component_configs: ComponentConfigs, modules: Modules):
         self.bot_cfg = bot_cfg
         self.logger = logger.get_logger(self.LOG_NAME, self.bot_cfg.get('logger'))
         self.log.info('Initializing bot')
         self.log.debug(f'[DEV TODO 2del] Bot CFG: {bot_cfg}')
-        strategies_path = bot_cfg['path']['strategies'] if bot_cfg['path']['strategies'].startswith(os.path.sep) else \
-            os.path.normpath(os.path.join(bot_cfg['path']['__working_dir'], bot_cfg['path']['strategies']))
-        self.strategies = import_modules.process(strategies_path, ModuleType.STRATEGY, self.log)
+
+        self.strategies = modules.strategy
+        self.portfolio = modules.portfolio
+        self.connector = modules.connector
+
 
         self.strategies_cfg = component_configs.strategy
         self.log.debug(f'[DEV TODO 2del] Components CFG Strategies: {component_configs.strategy}')

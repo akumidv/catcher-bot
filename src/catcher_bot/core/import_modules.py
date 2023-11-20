@@ -8,17 +8,45 @@ import os
 import sys
 import inspect
 from typing import Union
-
+from catcher_bot.core import logger
 from catcher_bot.model.module.loader import ModuleLoader
 from catcher_bot.model.namespace import ModuleType
 from catcher_bot.model.module.type import MODULE_CLASSES
 
 ModuleInitData = namedtuple("ModuleInitData", ['code', 'module', 'filepath'])
 
+modules_types = ('strategy', 'portfolio', 'connector')
+Modules = namedtuple('Modules', modules_types)
+
 MODULE_FOLDER_MAX_DEPTH = 2
+LOG_NAME = 'init modules'
+
+log = logger.get_def_logger(LOG_NAME)
 
 
-def process(modules_path: str, module_type: ModuleType, log: logging.Logger) -> list[ModuleLoader]:
+def import_modules(modules_path: dict) -> Modules:
+    """
+    Importing modules
+    """
+
+    strategies_path = modules_path.get('strategies') if modules_path.get('strategies') is None or \
+                                                        modules_path['strategies'].startswith(os.path.sep) else \
+                      os.path.normpath(os.path.join(modules_path['__working_dir'], modules_path['strategies']))
+    portfolio_path = modules_path.get('portfolio') if modules_path.get('portfolio') is None or \
+                                                      modules_path['portfolio'].startswith(os.path.sep) else \
+                     os.path.normpath(os.path.join(modules_path['__working_dir'], modules_path['portfolio']))
+    connector_path = modules_path.get('connector') if modules_path.get('connector') is None or \
+                                                      modules_path['connector'].startswith(os.path.sep) else \
+                     os.path.normpath(os.path.join(modules_path['__working_dir'], modules_path['connector']))
+
+    loaded_modules = Modules(strategy=load_modules(strategies_path, ModuleType.STRATEGY) if strategies_path else None,
+                             portfolio=load_modules(portfolio_path, ModuleType.PORTFOLIO) if portfolio_path else None,
+                             connector=load_modules(connector_path, ModuleType.CONNECTOR) if connector_path else None)
+
+    return loaded_modules
+
+
+def load_modules(modules_path: str, module_type: ModuleType) -> list[ModuleLoader]:
     """
     Importing modules
     """
@@ -28,10 +56,9 @@ def process(modules_path: str, module_type: ModuleType, log: logging.Logger) -> 
         module_instance = _get_module_instance(module_fn, module_type)
         if module_instance is not None:
             modules.append(module_instance)
-            log.info(f"Found {module_type} \"{module_instance.code}\" from "
+            log.info(f"Found {module_type.name} \"{module_instance.code}\" from "
                      f"file {module_instance.filepath}")
     return modules
-
 
 def _prepare_modules_file_names_list(strategies_path: str) -> list:
     modules_fn = []

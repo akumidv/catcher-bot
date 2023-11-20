@@ -16,7 +16,7 @@ CONFIG_STRATEGY_FN = 'strategies/mock.yaml'
 CONFIG_STRATEGY_FUT_FN = 'strategies/mock_futures.yaml'
 CONFIG_PORTFOLIO_FN = 'portfolio/mock_portfolio_risk.yaml'
 CONFIG_CONNECTOR_STOCK_FN = 'connectors/mock_binance_stock.yaml'
-CONFIG_CONNECTORS_DEREVIATEVE_FN = 'connectors/mock_binance_derivatives.yaml'
+CONFIG_CONNECTORS_DERIVATIVE_FN = 'connectors/mock_binance_derivatives.yaml'
 STRATEGY_FN = 'mock_strategy.py'
 
 

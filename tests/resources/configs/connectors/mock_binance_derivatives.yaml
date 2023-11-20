@@ -8,8 +8,8 @@
   description: Binance crypto futures
 
 - config_type: connector
+  connector_code: BinanceOptions
   connector_type: exchange
-#  connector_code: BinanceOptions
 #  market_type: option
 #  instrument_type: crypto
   code: binance_option_base

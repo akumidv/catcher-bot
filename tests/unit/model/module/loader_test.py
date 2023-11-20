@@ -9,10 +9,10 @@ from tests.resources.strategies.mock_strategy import MockStrategy
 log = logging.getLogger(os.path.basename(__file__)[:-3])
 
 
-def check_module(strategy_inst: ModuleLoader):
+def check_module(strategy_inst: ModuleLoader, class_type: type = Strategy):
     assert isinstance(strategy_inst, ModuleLoader)
     assert isinstance(strategy_inst.filepath, str)
-    assert issubclass(strategy_inst.class_instance, Strategy)
+    assert issubclass(strategy_inst.class_instance, class_type)
     assert isinstance(strategy_inst.code, str)
 
 

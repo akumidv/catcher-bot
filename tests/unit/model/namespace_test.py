@@ -16,6 +16,11 @@ def test_get_by_id():
         _ = ns.ModuleType.get_by_id(-1)
 
 
+def test_get_names():
+    type_names = [type_val.name for type_val in ns.ModuleType]
+    assert type_names == ns.get_names(ns.ModuleType)
+
+
 def test_is_valid_name():
     assert ns.ModuleType.is_valid_name('STRATEGY')
     assert not ns.ModuleType.is_valid_name('WRONG_TYPE')
