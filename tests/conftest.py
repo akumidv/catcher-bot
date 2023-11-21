@@ -8,6 +8,7 @@ from catcher_bot.core.bot_configurator import _verify_config
 from catcher_bot.core.component_configs import ComponentConfigs
 
 
+BOT_FOLDER = os.path.abspath(os.path.normpath(os.path.join(os.path.dirname(__file__), '../src/catcher_bot')))
 WORKING_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), 'resources'))
 STRATEGY_FOLDER = 'strategies'
 CONFIGS_FOLDER = 'configs'

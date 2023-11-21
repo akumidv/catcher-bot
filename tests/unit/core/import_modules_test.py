@@ -9,7 +9,7 @@ from catcher_bot.model.module.strategy import Strategy
 from catcher_bot.model.namespace import ModuleType
 
 from tests.unit.model.module.loader_test import check_module
-from tests.conftest import WORKING_FOLDER, STRATEGY_FOLDER, STRATEGY_FN
+from tests.conftest import WORKING_FOLDER, STRATEGY_FOLDER, STRATEGY_FN, BOT_FOLDER
 
 
 STRATEGIES_MOCK_PATH = f'{WORKING_FOLDER}/{STRATEGY_FOLDER}'
@@ -18,13 +18,31 @@ STRATEGIES_MOCK_PATH = f'{WORKING_FOLDER}/{STRATEGY_FOLDER}'
 log = logging.getLogger(os.path.basename(__file__)[:-3])
 
 
-def test_process_for_strategy():
+def test_import_modules_for_strategy():
     modules = import_modules.import_modules({'strategies': STRATEGY_FOLDER, '__working_dir': WORKING_FOLDER})
     strategies = modules.strategy
     assert isinstance(strategies, list)
     assert len(strategies) > 0
     strategy_inst = strategies[0]
     check_module(strategy_inst, Strategy)
+
+
+def test_import_base_modules():
+    print(BOT_FOLDER)
+    modules = import_modules.import_base_modules(BOT_FOLDER)
+    strategies = modules.strategy
+    assert isinstance(strategies, list)
+    assert len(strategies) > 0
+    strategy_inst = strategies[0]
+    check_module(strategy_inst, Strategy)
+
+    connectors = modules.connector
+    assert isinstance(connectors, list)
+    assert len(connectors) > 0
+
+    portfolio = modules.portfolio
+    assert isinstance(portfolio, list)
+    assert len(portfolio) > 0
 
 
 def test__prepare_modules_file_names_list():

@@ -4,13 +4,13 @@ from binance.client import AsyncClient, BinanceAPIException, Client
 # from binance.client import AsyncClient, BinanceAPIException
 from binance.streams import BinanceSocketManager
 
-from catcher_bot.interface.exchange import exchange_class
+from catcher_bot.model.module.connector import Connector
 import logging
 
 
-class Binance(exchange_class.Exchange):
+class BinanceStock(Connector):
     def __init__(self, credential: dict, log: logging.Logger):
-        super(Binance, self).__init__('binance', credential, log)
+        super(BinanceStock, self).__init__('binance', credential, log)
         # self.api_key = credential['api_key']
         # self.api_secret = credential['api_secret']
         # self.client = None
@@ -28,18 +28,3 @@ class Binance(exchange_class.Exchange):
         # /api/v3/exchangeInfo
         return exch_info['symbols']
 
-
-class BinanceSocket(exchange_class.ExchangeSocket):
-    def __init__(self, credential):
-        super(BinanceSocket, self).__init__('binance')
-        self.socket = None
-        self.client = None
-        self.api_key = credential['api_key']
-        self.api_secret = credential['api_secret']
-
-    async def connect(self):
-        self.client = await AsyncClient.create(self.api_key, self.api_secret)
-        self.socket = BinanceSocketManager(self.client, user_timeout=30)
-
-    async def disconnect(self):
-        await self.client.close_connection()

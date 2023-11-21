@@ -23,6 +23,12 @@ LOG_NAME = 'init modules'
 
 log = logger.get_def_logger(LOG_NAME)
 
+def import_base_modules(bot_root: str) -> Modules:
+    loaded_modules = Modules(strategy=load_modules(f"{bot_root}/strategies", ModuleType.STRATEGY),
+                             connector=load_modules(f"{bot_root}/interface", ModuleType.CONNECTOR),
+                             portfolio=load_modules(f"{bot_root}/portfolio", ModuleType.PORTFOLIO))
+    return loaded_modules
+
 
 def import_modules(modules_path: dict) -> Modules:
     """
@@ -39,6 +45,7 @@ def import_modules(modules_path: dict) -> Modules:
                                                       modules_path['connector'].startswith(os.path.sep) else \
                      os.path.normpath(os.path.join(modules_path['__working_dir'], modules_path['connector']))
 
+
     loaded_modules = Modules(strategy=load_modules(strategies_path, ModuleType.STRATEGY) if strategies_path else None,
                              portfolio=load_modules(portfolio_path, ModuleType.PORTFOLIO) if portfolio_path else None,
                              connector=load_modules(connector_path, ModuleType.CONNECTOR) if connector_path else None)
@@ -48,11 +55,13 @@ def import_modules(modules_path: dict) -> Modules:
 
 def load_modules(modules_path: str, module_type: ModuleType) -> list[ModuleLoader]:
     """
-    Importing modules
+    Load modules by type from dirrectory
     """
     modules = []
+    print(module_type.name, modules_path)
     modules_fn = _prepare_modules_file_names_list(modules_path)
     for module_fn in modules_fn:
+        print(module_fn)
         module_instance = _get_module_instance(module_fn, module_type)
         if module_instance is not None:
             modules.append(module_instance)
@@ -60,10 +69,10 @@ def load_modules(modules_path: str, module_type: ModuleType) -> list[ModuleLoade
                      f"file {module_instance.filepath}")
     return modules
 
-def _prepare_modules_file_names_list(strategies_path: str) -> list:
+def _prepare_modules_file_names_list(modules_path: str) -> list:
     modules_fn = []
-    for root, _, files in os.walk(strategies_path, topdown=True):
-        if root[len(strategies_path):].count(os.sep) >= MODULE_FOLDER_MAX_DEPTH:
+    for root, _, files in os.walk(modules_path, topdown=True):
+        if root[len(modules_path):].count(os.sep) >= MODULE_FOLDER_MAX_DEPTH:
             break
         level_modules_fn = [os.path.join(root, fn) for fn in files if fn.endswith('.py')]
         modules_fn.extend(level_modules_fn)

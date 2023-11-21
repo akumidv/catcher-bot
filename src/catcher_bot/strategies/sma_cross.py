@@ -1,4 +1,5 @@
-from catcher_bot.model.strategy import Strategy
+from catcher_bot.model.module.strategy import Strategy
+
 
 class SMA(Strategy):
     name = 'SMA Cross'
