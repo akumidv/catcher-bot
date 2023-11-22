@@ -23,14 +23,29 @@ LOG_NAME = 'init modules'
 
 log = logger.get_def_logger(LOG_NAME)
 
-def import_base_modules(bot_root: str) -> Modules:
-    loaded_modules = Modules(strategy=load_modules(f"{bot_root}/strategies", ModuleType.STRATEGY),
-                             connector=load_modules(f"{bot_root}/interface", ModuleType.CONNECTOR),
-                             portfolio=load_modules(f"{bot_root}/portfolio", ModuleType.PORTFOLIO))
-    return loaded_modules
-
 
 def import_modules(modules_path: dict) -> Modules:
+    """
+    Import all modules - from bot and user
+    """
+    loaded_base_modules = import_base_modules(modules_path['__bot_root_path'])
+    loaded_modules = import_user_modules(modules_path)
+    return Modules(strategy=loaded_base_modules.strategy + loaded_modules.strategy,
+                   connector=loaded_base_modules.connector + loaded_modules.connector,
+                   portfolio=loaded_base_modules.portfolio + loaded_modules.portfolio)
+
+
+def import_base_modules(bot_root_path: str) -> Modules:
+    """
+    Import bot modules
+    """
+    loaded_base_modules = Modules(strategy=load_modules(f"{bot_root_path}/strategies", ModuleType.STRATEGY),
+                             connector=load_modules(f"{bot_root_path}/interface", ModuleType.CONNECTOR),
+                             portfolio=load_modules(f"{bot_root_path}/portfolio", ModuleType.PORTFOLIO))
+    return loaded_base_modules
+
+
+def import_user_modules(modules_path: dict) -> Modules:
     """
     Importing modules
     """
@@ -46,9 +61,9 @@ def import_modules(modules_path: dict) -> Modules:
                      os.path.normpath(os.path.join(modules_path['__working_dir'], modules_path['connector']))
 
 
-    loaded_modules = Modules(strategy=load_modules(strategies_path, ModuleType.STRATEGY) if strategies_path else None,
-                             portfolio=load_modules(portfolio_path, ModuleType.PORTFOLIO) if portfolio_path else None,
-                             connector=load_modules(connector_path, ModuleType.CONNECTOR) if connector_path else None)
+    loaded_modules = Modules(strategy=load_modules(strategies_path, ModuleType.STRATEGY) if strategies_path else [],
+                             portfolio=load_modules(portfolio_path, ModuleType.PORTFOLIO) if portfolio_path else [],
+                             connector=load_modules(connector_path, ModuleType.CONNECTOR) if connector_path else [])
 
     return loaded_modules
 

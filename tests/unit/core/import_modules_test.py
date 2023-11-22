@@ -19,7 +19,24 @@ log = logging.getLogger(os.path.basename(__file__)[:-3])
 
 
 def test_import_modules_for_strategy():
-    modules = import_modules.import_modules({'strategies': STRATEGY_FOLDER, '__working_dir': WORKING_FOLDER})
+    modules = import_modules.import_modules({'strategies': STRATEGY_FOLDER, '__bot_root_path': BOT_FOLDER, '__working_dir': WORKING_FOLDER})
+    strategies = modules.strategy
+    assert isinstance(strategies, list)
+    assert len(strategies) > 0
+    strategy_inst = strategies[0]
+    check_module(strategy_inst, Strategy)
+
+    connectors = modules.connector
+    assert isinstance(connectors, list)
+    assert len(connectors) > 0
+
+    portfolio = modules.portfolio
+    assert isinstance(portfolio, list)
+    assert len(portfolio) > 0
+
+
+def test_import_user_modules_for_strategy():
+    modules = import_modules.import_user_modules({'strategies': STRATEGY_FOLDER, '__working_dir': WORKING_FOLDER})
     strategies = modules.strategy
     assert isinstance(strategies, list)
     assert len(strategies) > 0
@@ -28,7 +45,6 @@ def test_import_modules_for_strategy():
 
 
 def test_import_base_modules():
-    print(BOT_FOLDER)
     modules = import_modules.import_base_modules(BOT_FOLDER)
     strategies = modules.strategy
     assert isinstance(strategies, list)

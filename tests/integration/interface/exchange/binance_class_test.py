@@ -1,7 +1,7 @@
 import logging
 import pandas as pd
 import pytest
-from catcher_bot.interface.exchange.binance_class import Binance
+from catcher_bot.interface.exchange.binance_stock import BinanceStock
 
 pd.set_option('display.max_columns', 75)
 pd.set_option('display.width', 200)
@@ -18,7 +18,7 @@ def credential():
 @pytest.mark.skip
 @pytest.mark.asyncio
 async def test_get_symbol_list(credential):
-    binance_client = Binance(credential, log)
+    binance_client = BinanceStock(credential, log)
     await binance_client.connect()
     df = await binance_client.get_symbol_list()
     await binance_client.disconnect()
