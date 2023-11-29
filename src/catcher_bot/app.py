@@ -2,8 +2,8 @@
 Main bot starting module
 """
 import os
-from gettext import gettext as _i18n
 
+from catcher_bot.core.i18n import gettext as _
 from catcher_bot.core.bot_configurator import prepare_bot_config
 from catcher_bot.core.component_configs import load_configs, ComponentConfigs
 from catcher_bot.core.import_modules import import_modules, Modules

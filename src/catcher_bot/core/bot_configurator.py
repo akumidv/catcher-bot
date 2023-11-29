@@ -3,7 +3,7 @@ Configure module. Loading and parsing configs from bot configs and folder with b
 """
 import os
 import argparse
-from gettext import gettext as _i18n
+from catcher_bot.core.i18n import gettext as _
 import yaml
 
 from catcher_bot.core import logger
@@ -61,7 +61,7 @@ def _load_bot_config(config_path: str, bot_working_dir: str) -> dict:
     # bot_cfg = yaml.load(args.cfg, Loader=yaml.FullLoader)
     config_path = os.path.normpath(os.path.join(bot_working_dir, config_path))
     if not os.path.isfile(config_path):
-        raise FileNotFoundError(_i18n('Config file "%(config_path)s" is not found from working(current) '
+        raise FileNotFoundError(_('Config file "%(config_path)s" is not found from working(current) '
                                 'directory "%(bot_working_dir)s') % {'config_path': config_path,
                                                                       'bot_working_dir': bot_working_dir})
 
@@ -75,7 +75,7 @@ def _check_loaded_bot_config(bot_cfg: dict):
     if not isinstance(bot_cfg, dict):
         raise TypeError(f'Bot config should be dictionary, not the {type(bot_cfg)}')
     if 'config_type' not in bot_cfg:
-        raise KeyError(_i18n('Bot config should have "config_type" field'))
+        raise KeyError(_('Bot config should have "config_type" field'))
     if bot_cfg['config_type'] != 'bot':
         raise ValueError(f'Bot config type should be equal "bot", current config is "{bot_cfg["config_type"]}"')
 
@@ -99,7 +99,7 @@ def _update_config_from_env(bot_cfg: dict) -> dict: # TODO update some config va
     # if os.getenv('BINANCE_SECRET_KEY'):
     #   bot_cfg['credentials']['stock']['binance']['secret_key'] = os.getenv('BINANCE_SECRET_KEY')
 
-    log.debug(_i18n('Config updated by environment arguments'))
+    log.debug(_('Config updated by environment arguments'))
     return bot_cfg
 
 
@@ -134,15 +134,15 @@ def _verify_config(bot_cfg: dict):
     Verifying mandatory bot config structure
     """
     if not isinstance(bot_cfg, dict):
-        raise TypeError(_i18n('Bot config parameter "path" for components was not set'))
+        raise TypeError(_('Bot config parameter "path" for components was not set'))
     if 'path' not in bot_cfg:
-        raise KeyError(_i18n('Bot config parameter "path" for components was not set'))
+        raise KeyError(_('Bot config parameter "path" for components was not set'))
     if not isinstance(bot_cfg['path'], dict):
-        raise TypeError(_i18n('Bot config parameter "path" not content values of paths to components'))
+        raise TypeError(_('Bot config parameter "path" not content values of paths to components'))
     if 'config' not in bot_cfg['path']:
-        raise KeyError(_i18n('Bot config parameter "path.config" for configurations was not set'))
+        raise KeyError(_('Bot config parameter "path.config" for configurations was not set'))
     if '__working_dir' not in bot_cfg['path']:
-        raise KeyError(_i18n('Bot config parameter "__working_dir" is not automatically set'))
+        raise KeyError(_('Bot config parameter "__working_dir" is not automatically set'))
     if not os.path.isdir(bot_cfg['path']['__working_dir' ]):
         raise FileExistsError(f"Bot config working {bot_cfg['path']['__working_dir' ]} directory is not exist")
     # if 'credentials' not in bot_cfg:
