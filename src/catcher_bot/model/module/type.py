@@ -3,7 +3,7 @@ from typing import Hashable, Callable, Union
 from catcher_bot.model.namespace import ModuleType
 from catcher_bot.model.module.strategy import Strategy
 from catcher_bot.model.module.portfolio import Portfolio
-from catcher_bot.model.module.connector import Connector
+from provider.connector import Connector
 
 MODULE_CLASSES: dict[Union[Hashable, int], Callable[..., object]] = {
     ModuleType.STRATEGY: Strategy,

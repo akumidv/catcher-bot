@@ -1,7 +1,7 @@
 import logging
 import pandas as pd
 import pytest
-from catcher_bot.interface.exchange.binance_stock import BinanceStock
+from provider.exchange.binance_stock import BinanceStock
 
 pd.set_option('display.max_columns', 75)
 pd.set_option('display.width', 200)

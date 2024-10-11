@@ -4,7 +4,7 @@ from binance.client import AsyncClient, BinanceAPIException, Client
 # from binance.client import AsyncClient, BinanceAPIException
 from binance.streams import BinanceSocketManager
 
-from catcher_bot.model.module.connector import Connector
+from provider.connector import Connector
 import logging
 
 

@@ -4,6 +4,7 @@ python-binance
 # data
 numpy
 pandas
+aiohttp[speedups]
 
 # plot
 bokeh

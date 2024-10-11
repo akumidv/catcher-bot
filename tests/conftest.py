@@ -4,7 +4,7 @@ import pytest
 import yaml
 
 from catcher_bot.model.bot_context import BotContext
-from catcher_bot.core.bot_configurator import _verify_config
+# from catcher_bot.core.bot_configurator import _verify_config
 from catcher_bot.core.component_configs import ComponentConfigs
 
 

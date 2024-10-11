@@ -1,11 +1,13 @@
-import asyncio
+import asyncioao
 from binance.client import AsyncClient, BinanceAPIException, Client
 
 # from binance.client import AsyncClient, BinanceAPIException
 from binance.streams import BinanceSocketManager
 
-from catcher_bot.model.module.connector import ConnectorSocket
+from provider.connector import ConnectorSocket
 import logging
+
+
 class BinanceStockSocket(ConnectorSocket):
     def __init__(self, credential: dict, log: logging):
         super(BinanceStockSocket, self).__init__('binance')
