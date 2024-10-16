@@ -3,6 +3,7 @@ from abc import ABCMeta, abstractmethod, abstractproperty, ABC
 from typing import NamedTuple
 import logging
 import asyncio
+import os
 from typing import Callable, Coroutine, Iterable, List, Optional
 from itertools import chain
 # import datetime
@@ -35,14 +36,6 @@ from itertools import chain
 #         USED_WEIGHT['is_showed'] = False
 
 
-class GetRequest(NamedTuple):
-    """
-    Multiple Get Request params for each of them
-    """
-    path: str
-    params: dict | None = None
-
-
 class Connector(ABC):
     _metaclass__ = ABCMeta
     code = __name__
@@ -52,6 +45,7 @@ class Connector(ABC):
     _client = None
     log: logging.Logger
     BASE_URL: str
+    DEFAULT_REQUEST_LIMITS = os.environ.get('THREAD_LIMITS', 4)
 
     def __init__(self, name: str, credential: dict | None = None, log: logging.Logger | None = None):
         self.name = name.upper()
@@ -63,60 +57,18 @@ class Connector(ABC):
             self.api_key = credential['api_key']
             self.api_secret = credential['api_secret']
 
-    @staticmethod
-    async def _aworker(
-            coroutine: Coroutine,
-            tasks_queue: asyncio.Queue,
-            result_queue: asyncio.Queue,
-            stop_event: asyncio.Event,
-            timeout: float = 1,
-            callback: Optional[Callable] = None
-    ) -> None:
-        while not stop_event.is_set() or not tasks_queue.empty():
-            try:
-                idx, arg = await asyncio.wait_for(tasks_queue.get(), timeout)
-            except asyncio.TimeoutError:
-                continue
-            try:
-                result = await coroutine(*arg if isinstance(arg, GetRequest) else arg)
-                # result = await coroutine(arg)
-                result_queue.put_nowait((idx, result))
-            finally:
-                tasks_queue.task_done()
-                if callback is not None:
-                    callback(idx, arg)
 
-    async def _amap(
-            self,
-            coroutine: Coroutine,
-            data: Iterable,
-            max_concurrent_tasks: int = 10,
-            max_queue_size: int = -1,  # infinite
-            callback: Optional[Callable] = None,
-    ) -> List:
-        tasks_queue = asyncio.Queue(max_queue_size)
-        result_queue = asyncio.PriorityQueue()
+    async def _gather_with_concurrency(self, *tasks) -> tuple:
+        """
+        Process task by thread limits
+        """
+        semaphore = asyncio.Semaphore(self.DEFAULT_REQUEST_LIMITS)
+        async def sem_task(task):
+            async with semaphore:
+                return await task
 
-        stop_event = asyncio.Event()
-        workers = [
-            asyncio.create_task(self._aworker(
-                coroutine, tasks_queue, result_queue, stop_event, callback=callback
-            ))
-            for _ in range(max_concurrent_tasks)
-        ]
-
-        for arg in enumerate(data):
-            await tasks_queue.put(arg)
-        stop_event.set()
-
-        await asyncio.gather(*workers)
-        await tasks_queue.join()
-
-        results = []
-        while not result_queue.empty():
-            _, res = result_queue.get_nowait()
-            results.append(res)
-        return results
+        tasks_res = await asyncio.gather(*(sem_task(task) for task in tasks))
+        return tasks_res
 
     def get_name(self):
         return self.name
@@ -132,11 +84,11 @@ class Connector(ABC):
     async def _get(self, path: str, params: dict | None = None) -> list | dict:
         url = f'{self.BASE_URL}/{path}'
         resp = await self._client.get(url, params=params)
+        if resp.status == 422:
+            raise ValueError(f'[ERROR] in request format: {resp.status} {url} {params}')
+        elif resp.status != 200:
+            raise RuntimeError(f'Request error: {resp.status} {url} {params}')
         return await resp.json()
-
-    async def _get_multiple(self, requests: list[GetRequest]) -> list | dict:
-        res = self._amap(self._get, requests)
-        return list(chain.from_iterable(res))
 
     @abstractmethod
     async def get_symbol_list(self):

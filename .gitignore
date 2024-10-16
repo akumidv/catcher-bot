@@ -1,6 +1,7 @@
 .venv
 .idea
 .pytest_cache
+.cache_data/
 *.log
 .run
 # Coverage
