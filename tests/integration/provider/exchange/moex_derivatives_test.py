@@ -1,4 +1,5 @@
 import asyncio
+import datetime
 
 import pandas as pd
 import pytest
@@ -36,6 +37,20 @@ async def test_get_futures_list():
     check_df_columns(futures_df.columns, ['futures_code', 'symbol', 'type', 'expiration_date', 'underlying_code'])
     assert isinstance(futures_df.iloc[0]['expiration_date'], pd.Timestamp)
     check_all_column_values_in_set(futures_df['type'], TYPE_CODES)
+
+
+@pytest.mark.asyncio
+async def test_get_options_list():
+    client = await get_client()
+    options_df = await client.get_options_list()
+    print(options_df)
+    options_df.attrs = {'data_type': 'options_list', 'datetime': datetime.datetime.now().isoformat()}
+    print(options_df)
+    assert isinstance(options_df, pd.DataFrame)
+    check_df_columns(options_df.columns, ['futures_code', 'symbol', 'type', 'expiration_date', 'underlying_code'])
+    assert isinstance(options_df.iloc[0]['expiration_date'], pd.Timestamp)
+    check_all_column_values_in_set(options_df['type'], TYPE_CODES)
+
 
 
 def test__convert_dates():

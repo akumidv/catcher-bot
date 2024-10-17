@@ -2,9 +2,21 @@
 from enum import Enum
 
 
+
+class OptionType(str, Enum):
+    CALL = "call", "c"
+    PUT = "put", "p"
+
+    def __new__(cls, value, code):
+        obj = str.__new__(cls, [value])
+        obj._value_ = value
+        obj.code = code
+        return obj
+
+
 class AssetType(str, Enum):
-    OPTION_CALL = "call", "c"
-    OPTION_PUT = "put", "p"
+    # OPTION_CALL = "call", "c"
+    # OPTION_PUT = "put", "p"
     FUTURE = "future", 'f'
     SHARE = "share", 's'
     STOCK = "stock", 's'
@@ -19,19 +31,18 @@ class AssetType(str, Enum):
         obj.code = code
         return obj
 
-    def __str__(self):
-        return self.value
 
-    def __repr__(self):
-        return self.value
+OPTION_TYPE_MAP = {
+    OptionType.CALL.code: OptionType.CALL,
+    OptionType.PUT.code: OptionType.PUT,
+}
 
 
 ASSET_TYPE_MAP = {
-    AssetType.OPTION_CALL.code: AssetType.OPTION_CALL,
-    AssetType.OPTION_PUT.code: AssetType.OPTION_PUT,
     AssetType.FUTURE.code: AssetType.FUTURE,
     AssetType.SHARE.code: AssetType.SHARE,
     AssetType.CRYPTO.code: AssetType.CRYPTO,
     AssetType.COMMODITIES.code: AssetType.COMMODITIES,
     AssetType.INDEX.code: AssetType.INDEX,
 }
+
