@@ -15,13 +15,11 @@ class OptionType(str, Enum):
 
 
 class AssetType(str, Enum):
-    # OPTION_CALL = "call", "c"
-    # OPTION_PUT = "put", "p"
     FUTURE = "future", 'f'
     SHARE = "share", 's'
     STOCK = "stock", 's'
     CRYPTO = "cryptocurrency", 'x'
-    COMMODITIES = "commodities", 'g' # goods
+    COMMODITIES = "commodities", 'c'  # g goods
     CURRENCY = 'currency', 'm' # money
     INDEX = 'index', 'i'
 

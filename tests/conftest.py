@@ -3,10 +3,14 @@ import os
 import pytest
 import yaml
 
+import pandas as pd
 from catcher_bot.model.bot_context import BotContext
 # from catcher_bot.core.bot_configurator import _verify_config
 from catcher_bot.core.component_configs import ComponentConfigs
 
+pd.set_option('display.max_columns', 50)
+pd.set_option('display.width', 150)
+pd.set_option('display.max_rows', 300)
 
 BOT_FOLDER = os.path.abspath(os.path.normpath(os.path.join(os.path.dirname(__file__), '../src/catcher_bot')))
 WORKING_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), 'resources'))
