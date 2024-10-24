@@ -1,6 +1,6 @@
-
+import re
 from abc import ABCMeta, abstractmethod, abstractproperty, ABC
-from typing import NamedTuple
+from typing import NamedTuple, Literal
 import logging
 import asyncio
 import os
@@ -45,7 +45,8 @@ class Connector(ABC):
     _client = None
     log: logging.Logger
     BASE_URL: str
-    DEFAULT_REQUEST_LIMITS = os.environ.get('THREAD_LIMITS', 4)
+    DEFAULT_REQUEST_LIMITS = os.environ.get('THREAD_LIMITS', 6)
+    CALL_PUT_PATTERN = re.compile(r'(?=\w+\d+\.?\d*)([C|P])')
 
     def __init__(self, name: str, credential: dict | None = None, log: logging.Logger | None = None):
         self.name = name.upper()
@@ -57,6 +58,9 @@ class Connector(ABC):
             self.api_key = credential['api_key']
             self.api_secret = credential['api_secret']
 
+    def _parse_type_code_from_option_id(self, option_id: str) -> Literal['c', 'p'] | None:
+        type_code = self.CALL_PUT_PATTERN.search(option_id)
+        return None if type_code is None else type_code.group(1).lower()
 
     async def _gather_with_concurrency(self, *tasks) -> tuple:
         """
@@ -85,9 +89,9 @@ class Connector(ABC):
         url = f'{self.BASE_URL}/{path}'
         resp = await self._client.get(url, params=params)
         if resp.status == 422:
-            raise ValueError(f'[ERROR] in request format: {resp.status} {url} {params}')
+            raise ValueError(f'[ERROR] in request format: {resp.status} {url} {params} {resp.text}')
         elif resp.status != 200:
-            raise RuntimeError(f'Request error: {resp.status} {url} {params}')
+            raise RuntimeError(f'Request error: {resp.status} {url} {params} {resp.text}')
         return await resp.json()
 
     @abstractmethod

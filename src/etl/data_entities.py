@@ -1,6 +1,4 @@
-
 from enum import Enum
-
 
 
 class OptionType(str, Enum):
@@ -19,7 +17,7 @@ class AssetType(str, Enum):
     SHARE = "share", 's'
     STOCK = "stock", 's'
     CRYPTO = "cryptocurrency", 'x'
-    COMMODITIES = "commodities", 'c'  # g goods
+    COMMODITIES = "commodities", 'g' # g goods
     CURRENCY = 'currency', 'm' # money
     INDEX = 'index', 'i'
 
