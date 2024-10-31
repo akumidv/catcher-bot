@@ -6,7 +6,7 @@ import aiohttp
 import pandas as pd
 from typing import Literal
 from provider.connector import Connector
-from etl.data_entities import AssetType, OptionType
+from provider.data_entities import AssetType, OptionType
 from functools import wraps
 import logging
 from itertools import chain
@@ -26,6 +26,7 @@ TYPE_TO_MOEX_ASSET_TYPE = {
     AssetType.CURRENCY.code: 'currency',
     AssetType.INDEX.code: 'index',
 }
+
 
 
 def day_cache_async(func):
@@ -74,6 +75,7 @@ def connect_check111(func):
 class MoexOptions(Connector):
     """
     API Swagger Doc https://iss.moex.com/iss/apps/option-calc/v1/docs
+    MOEX Base API https://iss.moex.com/iss/reference/
 
     """
     _client: aiohttp.ClientSession | None = None
@@ -123,9 +125,44 @@ class MoexOptions(Connector):
         else:
             logging.warning('MOEX already closed')
 
+    async def get_working_time(self):
+        """
+        https://iss.moex.com/iss/engines/futures.xml
+        TODO get calendar
+        check is in working period - than return minute
+        if not return last close time
+        """
+
+    @day_cache_async
     @_connect_check
-    async def _get(self, path: str, params: dict | None = None) -> list | dict:
-        url = f'{self.BASE_URL}/{path}'
+    async def get_calendar(self):
+        """
+        https://www.moex.com/n64121 роспись
+        проводиться в официальные выходные дни 3–5 и 8 января, 29 и 30 апреля, 10 мая и 30 декабря 2024 года.
+        В дни официальных государственных праздников 1–2 января, 7 января, 23 февраля, 8 марта, 1 мая, 9 мая, 12 июня, 4 ноября 2024 года торги на рынках Московской биржи не проводятся.
+        Обращаем ваше внимание, что 27 апреля, 2 ноября и 28 декабря 2024 года ­– рабочие субботы, торги проводятся в обычном режиме.
+        https://iss.moex.com/iss/engines/futures.xml
+
+        https://xmlcalendar.ru/ - календарь https://xmlcalendar.ru/data/ru/2024/calendar.json
+        * предпразничный день с сокр. на 1 час рабочим днем. + рабочи ставшие выходными, transitions - выходные, которые стали рабочими.
+        """
+        import io
+        resp = await self._client.get('https://iss.moex.com/iss/engines/futures.xml')
+        resp_text = await resp.text()
+        df_current_week = pd.read_xml(io.StringIO(resp_text), xpath="data[@id='timetable']/rows/row")
+        print(df_current_week)
+        df_working_days_and_holidays = pd.read_xml(io.StringIO(resp_text), xpath="data[@id='dailytable']/rows/row") # Не надежный - последняя дата 06.12
+        print(df_working_days_and_holidays)
+        # verify by https://www.moex.com/n64121
+        # df = pd.read_xml('https://iss.moex.com/iss/engines/futures.xml', xpath="data[@id='timetable']/rows/row", )
+        # TODO GENERATE HOLIDAYS FROM exchange_calendars
+        # COMBINE THEM WITH MOEX response and return calendar
+        return df_working_days_and_holidays
+
+
+    @_connect_check
+    async def _get(self, path: str, params: dict | None = None, base_url: str | None = None) -> list | dict:
+        url = f'{self.BASE_URL}/{path}' if base_url is None else f'{base_url}/{path}'
         resp = await self._client.get(url, params=params)
         response = await resp.json()
         if resp.status == 422:
@@ -150,7 +187,12 @@ class MoexOptions(Connector):
                                                       'asset_subtype': 'underlying_subtype', 'title': 'name',
                                                       'secid': 'exchange_option_id', # is not uniq due it do not contain full year
                                                       'futures_code': 'exchange_future_id', # is not uniq due it do not contain full year
-                                                      'optionseries_code': 'exchange_option_series_id'})
+                                                      'optionseries_code': 'exchange_option_series_id',
+                                                      'theorprice': 'calculated_option_price',
+                                                      'lastprice': 'last_price',
+                                                      'settleprice': 'settlement_price'
+
+                                                      })
         if columns_rename:
             df.rename(columns=columns_rename, inplace=True)
         return df
@@ -161,7 +203,8 @@ class MoexOptions(Connector):
                              'share': AssetType.SHARE.code,
                              'currency': AssetType.CURRENCY.code,
                              'commodity': AssetType.COMMODITIES.code}
-        columns_retype = self._filter_list_by_column(df.columns, columns if columns else ['underlying_type', 'underlying_subtype'])
+        columns_retype = self._filter_list_by_column(df.columns, columns if columns else ['underlying_type',
+                                                                                          'underlying_subtype'])
         if type_replace_dict:
             df[columns_retype] = df[columns_retype].replace(type_replace_dict)
         if 'option_type' in df.columns:
@@ -195,7 +238,8 @@ class MoexOptions(Connector):
         89   WHEAT  WHEAT (фьючерс)    f    g        WHEAT.F/MOEX
         90   YDEX   YDEX (ЯНДЕКС)      s    None     YDEX.S/MOEX
         """
-        assert underlying_type is None or underlying_type in ['futures', 'currency', 'share', 'index', 'commodity']
+        if underlying_type is not None and underlying_type not in ['futures', 'currency', 'share', 'index', 'commodity']:
+            raise ValueError(f'{underlying_type} is unknown type')
         params = {'asset_type': underlying_type} if underlying_type else None
         underlyings = await self._get('assets', params=params)
         und_df = pd.DataFrame.from_records(underlyings)
@@ -247,20 +291,11 @@ class MoexOptions(Connector):
 8650  GL7800CJ4D  GLDRUB_TOM    g     None      2024-10-24           W  7800.0           c  GLDRUB_TOM.G/MOEX RUB
 8651  GL7800CV4D  GLDRUB_TOM    g     None      2024-10-24           W  7800.0           p  GLDRUB_TOM.G/MOEX RUB
         """
-        # TODO think of columns based on exchange_option_id
-        # или отавить локальное кодирование и сделать свое например ABIO.S.C.76D24/MOEX  CNYRUB_TOM.M.C.12.6D24/MOEX  - но тогда
-        # точка смешивается с цифрой и подчеркивание не годится
-        # CNYRUB_TOM|M|12.6CD24/MOEX
-        # CNYRUB_TOM(M)12.6CD24@MOEX
-        # CNYRUB_TOM/M|C12.6D24@MOEX
-        # или не парится и оставить локальный код - но на моех там год одной цифрой - хоят экспирации разные т.е.ключ
-        # длинный  underying_id, option_type, expiration_date, strike
         if symbols_df is None:
             all_symbols_df = await self.get_symbol_list()
             symbols_df = all_symbols_df[['exchange_symbol', 'underlying_type']]
         tasks = []
         for idx, opt_row in symbols_df.iterrows():
-            # print(idx, opt_row['exchange_symbol'], opt_row['type'], TYPE_TO_MOEX_ASSET_TYPE.get(opt_row['underlying_type']))
             params = {'asset_type': TYPE_TO_MOEX_ASSET_TYPE.get(opt_row['underlying_type'])}
             if 'expiration_date' in symbols_df:
                 params.update = {'expiration_date': opt_row['expiration_date']}
@@ -358,10 +393,16 @@ TODO Timeframe convert for D as last datetime after trades stop and before start
         options_df = pd.DataFrame.from_records(results)
         options_df = self._data_normalization(options_df)
         options_df.drop(columns=['underlying_type', 'underlying_asset'], inplace=True)
-        options_df = options_df.merge(options_list_df[['exchange_option_id', 'underlying_id']], on='exchange_option_id')
-        options_df['option_type'] = options_df['exchange_option_id'].apply(self._parse_type_code_from_option_id)
 
-        options_df['currency'] = 'RUB'
+        options_df = options_df.merge(
+            options_list_df[['exchange_future_id', 'expiration_date',  # 'exchange_symbol', 'type', 'series_type',
+                             'option_type', 'underlying_id', 'exchange_option_id', 'currency']],  # request_time, strike
+            on=['exchange_option_id'], how='left')
+
+        # options_df = options_df.merge(options_list_df[['exchange_option_id', 'underlying_id']], on='exchange_option_id')
+        # options_df['option_type'] = options_df['exchange_option_id'].apply(self._parse_type_code_from_option_id)
+
+        # options_df['currency'] = 'RUB'
         return options_df
 
 

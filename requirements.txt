@@ -6,6 +6,7 @@ numpy
 pandas
 aiohttp[speedups]
 pyarrow #==17.0.0
+exchange_calendars
 
 # plot
 bokeh

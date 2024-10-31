@@ -5,17 +5,14 @@ import pandas as pd
 import pytest
 import os
 from provider.exchange.moex_derivatives import MoexOptions
-from etl.data_entities import AssetType, OptionType
+from provider.data_entities import AssetType, OptionType
 from tests.utiltest import check_df_columns, check_all_column_values_in_set
-
 
 
 TYPE_CODES = [AssetType.FUTURE.code, AssetType.INDEX.code, AssetType.SHARE.code,  AssetType.CURRENCY.code,
               AssetType.COMMODITIES.code]
 OPT_TYPES_CODES = [OptionType.CALL.code, OptionType.PUT.code]
 
-
-#@pytest.mark.asyncio
 @pytest.fixture
 def moex_client() -> MoexOptions:
     moex_client = MoexOptions()
@@ -92,7 +89,7 @@ async def test_get_option_for_id(moex_client):
                                           'underlying_price', 'volatility', 'underlying_id',  'theorprice', # 'underlying_type',
                                           'fee', 'expiring_date', 'lastprice', 'settleprice'])
     # assert isinstance(options_df.iloc[0]['expiration_date'], pd.Timestamp)
-    check_all_column_values_in_set(options_df['type'], TYPE_CODES)
+    check_all_column_values_in_set(options_df['option_type'].unique(), OPT_TYPES_CODES)
     # print(options_df[options_df['exchange_symbol']=='BR'])
 
 
@@ -106,4 +103,24 @@ async def test_get_options(moex_client):
                                           'option_type', 'underlying_id', 'currency', 'underlying_price',
                                           'fee', 'lastprice', 'settleprice'])
     assert isinstance(options_df.iloc[0]['expiration_date'], pd.Timestamp)
-    check_all_column_values_in_set(options_df['option_type'], OPT_TYPES_CODES)
+    check_all_column_values_in_set(options_df['option_type'].unique(), OPT_TYPES_CODES)
+
+import pandas_market_calendars as mcal
+import exchange_calendars as xcals
+def test_a():
+    moex_cal = mcal.get_calendar('NYSE') #MOEX
+    print(moex_cal.tz.zone)
+    # print(moex_cal.holidays().holidays)
+    print(moex_cal.regular_market_times)
+    # ext = moex_cal.schedule(start_date = pd.Timestamp().now(), end_date=pd.Timestamp().now(), start="pre", end="post")
+    # print(ext)
+    # print(moex_cal.open_at_time(ext, pd.Timestamp('2012-07-03 12:00', tz='America/New_York')))
+    # print(moex_cal.open_at_time(ext, pd.Timestamp().now()))
+
+    print(xcals.get_calendar_names(include_aliases=False))
+    xmoex = xcals.get_calendar("XMOS")
+    print(xmoex.schedule.loc["2024-10-01":"2024-10-30"])
+
+@pytest.mark.asyncio
+async def test_get_working_calendar(moex_client):
+    calendar = await moex_client.get_calendar()

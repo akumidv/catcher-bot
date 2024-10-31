@@ -1,11 +1,10 @@
 [project]
-name = "data acessor subscriptions"
+name = "catcher-bot"
 version = "0.0.1"
 authors = [
-    { name="Tony Star", email="ts@allasso.ch" },
-    { name="Akumidv", email="ak@allasso.ch" },
+    { name="Andrei Kuminov", email="akuminov@gmail.com" },
 ]
-description = "Data Accessor Subscription"
+description = "Catcher Bot"
 readme = "README.md"
 requires-python = ">=3.11"
 classifiers = [
@@ -22,3 +21,35 @@ license = {file = "LICENSE"}
 [tool.pytest.ini_options]
 pythonpath = "src"
 #asyncio_mode="auto"
+
+[tool.poetry]
+name = "catcher-bot"
+version = "0.1.0"
+description = ""
+authors = ["Andrei Kuminov <akuminov@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+PyYAML = "*"
+
+# Excahnges
+exchange-calendars = "^4.5.7"
+python-binance  = "*"
+
+# data
+numpy = "*"
+pandas = "*"
+pyarrow = "*" #==17.0.0
+aiohttp = {extras = ["speedups"], version = "^3.10.10"}
+
+# plot
+#bokeh = "*"
+#matplotlib = "*"
+#mplfinance = "*"
+#numba = "*"
+lxml = "^5.3.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

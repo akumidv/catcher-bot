@@ -7,6 +7,6 @@
 # Coverage
 .coverage
 htmlcov
-
+poetry.lock
 #Mkdocs
 [Ss]ite/
